@@ -92,7 +92,6 @@ POST /wp-json/jwt-auth/v1/token/validate
 
 * Default expiration: **7 days**
 * Store token securely (localStorage or memory)
-* On authentication error (invalid or expired token) → force logout and redirect to login
 * Validate token at application startup
 
 ---
