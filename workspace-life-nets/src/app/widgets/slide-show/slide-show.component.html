@@ -1,0 +1,46 @@
+
+<div class="slider-header d-flex justify-content-between align-items-center mb-3">
+            <h2 class="slider-title m-0">{{sliderName}}</h2>
+            <div class="slider-nav">
+               <h3 class="slider-title m-0">Call to Action to do</h3>
+            </div>
+        </div>
+<swiper-container
+  #swiperEl
+  slides-per-view="3"
+  space-between="24"
+>
+
+  <swiper-slide *ngFor="let item of items">
+    <app-display-item [item]="item"></app-display-item>
+  </swiper-slide>
+</swiper-container>
+
+
+<section class="slider-container my-5">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-end mb-3 slider-nav">
+      <button  (click)="prev()" [disabled]="isBeginning">
+        <!-- freccia sinistra -->
+        <svg width="58" height="24" viewBox="0 0 58 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M56.0664 13.5C56.8948 13.5 57.5664 12.8284 57.5664 12C57.5664 11.1716 56.8948 10.5 56.0664 10.5ZM0.534355 10.9393C-0.0514298 11.5251 -0.0514297 12.4749 0.534355 13.0607L10.0803 22.6066C10.6661 23.1924 11.6158 23.1924 12.2016 22.6066C12.7874 22.0208 12.7874 21.0711 12.2016 20.4853L3.71634 12L12.2016 3.51472C12.7874 2.92894 12.7874 1.97919 12.2016 1.3934C11.6158 0.807615 10.6661 0.807615 10.0803 1.3934L0.534355 10.9393ZM56.0664 10.5L1.59502 10.5L1.59502 13.5L56.0664 13.5Z"
+            fill="#0C1B29" />
+        </svg>
+      </button>
+
+      <button (click)="next()" [disabled]="isEnd">
+        <!-- freccia destra -->
+        <svg width="58" height="24" viewBox="0 0 58 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M1.52832 10.5C0.699893 10.5 0.0283202 11.1716 0.0283203 12C0.0283204 12.8284 0.699893 13.5 1.52832 13.5ZM57.0604 13.0607C57.6462 12.4749 57.6462 11.5251 57.0604 10.9393L47.5144 1.39339C46.9286 0.807608 45.9789 0.807608 45.3931 1.39339C44.8073 1.97918 44.8073 2.92893 45.3931 3.51472L53.8784 12L45.3931 20.4853C44.8073 21.0711 44.8073 22.0208 45.3931 22.6066C45.9789 23.1924 46.9286 23.1924 47.5144 22.6066L57.0604 13.0607ZM1.52832 13.5L55.9997 13.5L55.9997 10.5L1.52832 10.5Z"
+            fill="#0C1B29" />
+        </svg>
+      </button>
+    </div>
+
+
+  </div>
+</section>

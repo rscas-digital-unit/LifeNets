@@ -1,0 +1,14 @@
+<app-display-event
+  *ngIf="isEvent(item)"
+  [event]="item">
+</app-display-event>
+
+<app-display-publication
+  *ngIf="isPublication(item)"
+  [publication]="item">
+</app-display-publication>
+
+<app-display-post
+  *ngIf="isPost(item)"
+  [post]="item">
+</app-display-post>

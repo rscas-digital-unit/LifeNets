@@ -1,0 +1,8 @@
+<app-header></app-header>
+<br><br>
+<app-slide-show [sliderName] = "'Events'"  [items]="this.repository.getEvents()"></app-slide-show>
+<app-slide-show [sliderName] = "'Posts'" [items]="this.repository.getPosts()"></app-slide-show>
+<app-call-to-action></app-call-to-action>
+<app-slide-show [sliderName] = "'Publications'" [items]="this.repository.getPublications()"></app-slide-show>
+<app-call-to-action></app-call-to-action>
+<app-footer></app-footer>
