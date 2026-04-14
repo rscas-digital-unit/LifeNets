@@ -1,15 +1,24 @@
 <div class="Card Card__event">
         <div class="Card__border--top position-relative w-100">
-                            <div class="Tag Tag__top">Workshop</div>
-                        <a class="text-decoration-none" href="https://fsr.eui.eu/event/37th-young-energy-economists-and-engineers-seminar-yeees/" title="37th Young Energy Economists and Engineers Seminar (YEEES)"><img class="Img Img__rounded" src="https://fsr.eui.eu/wp-content/uploads/2026/04/event-49020.png" alt="37th Young Energy Economists and Engineers Seminar (YEEES)"></a>
+                            
+
+<div
+  class="Tag Tag__top"
+  *ngIf="event.eventType"
+>
+  {{ event.eventType }}
+</div>
+
+
+                        <a class="text-decoration-none" href="{{event.link}}" title="{{event.title}}"><img class="Img Img__rounded" src="{{event.image}}" alt="{{event.title}}"></a>
         </div>
         <div class="Card__bottom">
-            <div class="Label__date ms-auto">16 Apr 2026</div>
+            <div class="Label__date ms-auto">{{event.date}}</div>
             <div class="Card__content">
                 <div class="Card__content--meta d-flex flex-column">
                     <div class="Card__content--cpt">EVENT</div>
-                    <div class="Card__content--title"><a class="text-decoration-none" href="https://fsr.eui.eu/event/37th-young-energy-economists-and-engineers-seminar-yeees/" title="37th Young Energy Economists and Engineers Seminar (YEEES)">37th Young Energy Economists and Engineers Seminar (YEEES)</a></div>
-                    <div class="Card__content--text">The Florence School of Regulation is pleased to host the 37th edition of the Young Energy Economists...</div>
+                    <div class="Card__content--title"><a class="text-decoration-none" href="{{event.link}}" title="{{event.title}}">{{event.title}}</a></div>
+                    <div class="Card__content--text">{{event.description}}</div>
                 </div>
             </div>
         </div>

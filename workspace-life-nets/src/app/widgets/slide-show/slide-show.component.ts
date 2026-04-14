@@ -1,4 +1,4 @@
-import { Component, Input, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DisplayItemComponent } from '../display-item/display-item.component';
@@ -15,22 +15,32 @@ import { CardModel } from '../../models/card.model';
   ],
   templateUrl: './slide-show.component.html',
   styleUrls: ['./slide-show.component.css'],
-   schemas: [CUSTOM_ELEMENTS_SCHEMA] // ✅ QUESTA RIGA MANCAV
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] // ✅ QUESTA RIGA MANCAV
 })
-export class SlideShowComponent implements AfterViewInit{
+export class SlideShowComponent implements AfterViewInit, OnChanges {
   @Input() items: CardModel[] = [];
 
 
-  
- @Input() sliderName: string="Pippo";
- 
- 
+
+  @Input() sliderName: string = "Pippo";
+
+
   @ViewChild('swiperEl', { static: true })
   swiperEl!: ElementRef<any>;
 
   itemsPerpage = 3;
-isBeginning = true;
+  isBeginning = true;
   isEnd = false;
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['items']) {
+      console.log('items changed:', changes['items'].currentValue);
+      const swiper = this.swiperEl.nativeElement.swiper;
+      this.updateNavigationState(swiper);
+    }
+  }
+
 
   ngAfterViewInit(): void {
     const swiper = this.swiperEl.nativeElement.swiper;
@@ -42,6 +52,9 @@ isBeginning = true;
     this.swiperEl.nativeElement.swiper.on('slideChange', () => {
       this.updateNavigationState(swiper);
     });
+
+    console.log("items");
+    console.log(this.items);
   }
 
   next(): void {
@@ -53,12 +66,13 @@ isBeginning = true;
   }
 
   private updateNavigationState(swiper: any): void {
-    this.isBeginning = swiper.activeIndex<=0;
-    this.isEnd = (swiper.activeIndex>=this.items.length-3);
+    console.log("NUMERO ITEMS: " + this.items.length);
+    this.isBeginning = swiper.activeIndex <= 0;
+    this.isEnd = (swiper.activeIndex >= this.items.length - 3);
   }
 
 
-  
+
 
 
 }

@@ -6,6 +6,10 @@ import { Publication } from '../models/publication.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginPayload } from '../models/api/login-payload.model';
 import { Post } from '../models/post.model';
+import { EventDto } from '../models/api/event-dto.model';
+import { PublicationDto } from '../models/api/pubblication-dto.model';
+import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
+import { PostDto } from '../models/api/post-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -52,9 +56,9 @@ validateToken() {
   );
 }
 
-getPubblications() {
+getPubblications(): Observable<PublicationDto[]> {
   console.log("TOKEN "+this.token)
-  return this.http.get(
+  return this.http.get<PublicationDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/publication',
     {
       headers: {
@@ -73,9 +77,12 @@ getPubblications() {
 
 }
 
-getEvents() {
-  console.log("TOKEN "+this.token)
-  return this.http.get(
+
+getEvents(): Observable<EventDto[]> {
+  console.log('TOKEN', this.token);
+
+  return this.http.get<EventDto[]>(
+
     this.apiBaseUrl+'wp-json/wp/v2/event',
     {
       headers: {
@@ -94,9 +101,9 @@ getEvents() {
 
 }
 
-getPosts() {
+getPosts(): Observable<PostDto[]> {
   console.log("TOKEN "+this.token)
-  return this.http.get(
+  return this.http.get<PostDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/posts',
     {
       headers: {
@@ -137,6 +144,27 @@ getAdvertisings() {
 
 }
 
+
+getList(listName:string, include:string): Observable<TaxonomyDto[]>{
+  console.log("TOKEN "+this.token)
+  return this.http.get<TaxonomyDto[]>(
+    this.apiBaseUrl+'wp-json/wp/v2/'+listName,
+    {
+      headers: {
+        Authorization: `Bearer ${this.token}`
+      },
+      params: {
+        include: include
+      }
+    }
+  )
+.pipe(
+    tap(response => {
+      console.log('GET '+listName+' response:', response);
+    })
+  );
+
+}
 
 
 getTags(include:string) {
@@ -220,13 +248,19 @@ getMedia(id:string) {
 }
 
 
-getEventType(id:string) {
+
+
+
+getEventType(include:string) {
   console.log("TOKEN "+this.token)
   return this.http.get(
-    this.apiBaseUrl+'wp-json/wp/v2/event_type/'+id,
+    this.apiBaseUrl+'wp-json/wp/v2/event_type',
     {
       headers: {
         Authorization: `Bearer ${this.token}`
+      },
+      params: {
+        include: include
       }
     }
   )
@@ -240,6 +274,7 @@ getEventType(id:string) {
 
 
 /* PROVVISORIO */
+/*
 private events: Event[] = [
   new Event(1, 'Angular Meetup', 'Angular community meetup', '/events/angular-meetup'),
   new Event(2, 'Frontend Conference', 'Frontend development conference', '/events/frontend-conference'),
@@ -283,8 +318,8 @@ private posts: Post[] = [
   new Post(210, 'State Management Explained', 'State management fundamentals', '/posts/state-management'),
   new Post(211, 'Angular Signals', 'Working with Angular Signals', '/posts/angular-signals'),
   new Post(212, 'Modern Web UI', 'Modern UI development techniques', '/posts/modern-web-ui')
-];
-
+];*/
+/*
   readEvents(): Observable<Event[]> {
     return of(this.events);
   }
@@ -295,5 +330,5 @@ private posts: Post[] = [
 
   readPosts(): Observable<Post[]> {
     return of(this.posts);
-  }
+  }*/
 }

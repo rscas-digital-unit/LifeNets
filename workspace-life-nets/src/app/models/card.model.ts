@@ -13,11 +13,12 @@ export abstract class CardModel {
     id: number,
     title: string,
     description: string,
-    link: string
+    link: string,
   ) {
     this.id = id;
     this.title = title;
     this.description = description;
     this.link = link;
+    
   }
 }
