@@ -19,7 +19,7 @@ export class MapperService {
     
     return new Event(
       dto.id,
-      dto.title?.rendered ?? dto.acf?.title ?? '',
+      this.decodeHtmlEntities(dto.title?.rendered) ?? this.decodeHtmlEntities(dto.acf?.title) ?? '',
       this.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
       dto.link,
       this.formatDateShort(dto.date),
@@ -54,7 +54,7 @@ fromPublicationDto(
 
   return new Publication(
     dto.id,
-    dto.title?.rendered ?? '',
+    this.decodeHtmlEntities(dto.title?.rendered) ?? '',
     this.extractPlainTextPreview(dto.excerpt?.rendered)
       ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
     dto.link,
@@ -75,7 +75,7 @@ fromPublicationDto(
     
     return new Post(
       dto.id,
-      dto.title?.rendered ?? '',
+      this.decodeHtmlEntities(dto.title?.rendered) ?? '',
       this.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
       dto.link,
       this.decodeIdToLink(dto.featured_media,images),
@@ -235,6 +235,16 @@ extractUniqueAsString<T>(
   });
 
   return Array.from(uniqueValues).join(',');
+}
+
+decodeHtmlEntities(text: string): string {
+  if (!text) {
+    return '';
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
 }
 
 }

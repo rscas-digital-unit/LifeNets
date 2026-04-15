@@ -2,19 +2,24 @@
 
   <div class="Card__content">
 
-    <div *ngIf="publication.categories" class="Tag">
+    <div
+      class="Tag"
+      *ngIf="publication.categories"
+    >
       <a
         [href]="publication.link"
         [title]="publication.categories[0]"
+        [textContent]="publication.categories[0]"
       >
-        {{ publication.categories[0] }}
       </a>
     </div>
 
     <div class="Card__content--meta">
 
-      <div class="Card__content--cpt">
-        PUBLICATION • {{ publication.pubType }}
+      <div
+        class="Card__content--cpt"
+        [textContent]="'PUBLICATION • ' + publication.pubType"
+      >
       </div>
 
       <div class="Card__content--title">
@@ -22,18 +27,23 @@
           class="text-decoration-none"
           [href]="publication.link"
           [title]="publication.title"
+          [textContent]="publication.title"
         >
-          {{ publication.title }}
         </a>
       </div>
 
-      <div class="Card__content--text">
-        {{ publication.description }}
+      <div
+        class="Card__content--text"
+        [textContent]="publication.description"
+      >
       </div>
 
     </div>
 
-    <div class="Card__taglist" *ngIf="publication.tags?.length">
+    <div
+      class="Card__taglist"
+      *ngIf="publication.tags?.length"
+    >
 
       <div
         class="Card__taglist--item"
@@ -43,8 +53,8 @@
           class="text-decoration-none"
           [href]="publication.link"
           [title]="tag"
+          [textContent]="tag"
         >
-          {{ tag }}
         </a>
       </div>
 
@@ -52,16 +62,16 @@
 
   </div>
 
-  <div class="Card__authors mb-2 ms-3" *ngIf="publication.people?.length">
+  <div
+    class="Card__authors mb-2 ms-3"
+    *ngIf="publication.people?.length"
+  >
 
     <a
       *ngFor="let person of publication.people"
       [href]="publication.link"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      [attr.data-bs-title]="person.name"
-      [attr.aria-label]="person.name"
-      [attr.data-bs-original-title]="person.name"
+      
+      [title]="person.name"
     >
       <img
         class="Card__authors_img"

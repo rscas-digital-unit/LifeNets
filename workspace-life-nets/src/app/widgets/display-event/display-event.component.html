@@ -1,27 +1,60 @@
 <div class="Card Card__event">
-        <div class="Card__border--top position-relative w-100">
-                            
 
-<div
-  class="Tag Tag__top"
-  *ngIf="event.eventType"
->
-  {{ event.eventType }}
-</div>
+  <div class="Card__border--top position-relative w-100">
 
-
-                        <a class="text-decoration-none" href="{{event.link}}" title="{{event.title}}"><img class="Img Img__rounded" src="{{event.image}}" alt="{{event.title}}"></a>
-        </div>
-        <div class="Card__bottom">
-            <div class="Label__date ms-auto">{{event.date}}</div>
-            <div class="Card__content">
-                <div class="Card__content--meta d-flex flex-column">
-                    <div class="Card__content--cpt">EVENT</div>
-                    <div class="Card__content--title"><a class="text-decoration-none" href="{{event.link}}" title="{{event.title}}">{{event.title}}</a></div>
-                    <div class="Card__content--text">{{event.description}}</div>
-                </div>
-            </div>
-        </div>
-        <div class="Card__taglist">
-                    </div>
+    <div
+      class="Tag Tag__top"
+      *ngIf="event.eventType"
+      [textContent]="event.eventType">
     </div>
+
+    <a
+      class="text-decoration-none"
+      [href]="event.link"
+      [title]="event.title">
+
+      <img
+        class="Img Img__rounded"
+        [src]="event.image"
+        [alt]="event.title">
+    </a>
+
+  </div>
+
+  <div class="Card__bottom">
+
+    <div
+      class="Label__date ms-auto"
+      [textContent]="event.date">
+    </div>
+
+    <div class="Card__content">
+      <div class="Card__content--meta d-flex flex-column">
+
+        <div
+          class="Card__content--cpt"
+          textContent="EVENT">
+        </div>
+
+        <div class="Card__content--title">
+          <a
+            class="text-decoration-none"
+            [href]="event.link"
+            [title]="event.title"
+            [textContent]="event.title">
+          </a>
+        </div>
+
+        <div
+          class="Card__content--text"
+          [textContent]="event.description">
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="Card__taglist"></div>
+
+</div>
