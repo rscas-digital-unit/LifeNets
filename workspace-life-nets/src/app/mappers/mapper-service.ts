@@ -67,24 +67,25 @@ fromPublicationDto(
 }
 
   fromPublicationDtoList(dtos: PublicationDto[],images: TaxonomyDto[], tags: TaxonomyDto[], categories: TaxonomyDto[], people:PeopleDto[], peopleMedia:TaxonomyDto[]): Publication[] {
-    console.log(people);
-    console.log(peopleMedia);
     return dtos.map(dto => this.fromPublicationDto(dto, images, tags, categories, people, peopleMedia));
   }
 
 
-  fromPostDto(dto: PostDto,images: TaxonomyDto[]): Post {
+  fromPostDto(dto: PostDto,images: TaxonomyDto[], categories: TaxonomyDto[], typespost: TaxonomyDto[]): Post {
+    
     return new Post(
       dto.id,
       dto.title?.rendered ?? '',
       this.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
       dto.link,
-      this.decodeIdToLink(dto.featured_media,images)
+      this.decodeIdToLink(dto.featured_media,images),
+      this.decodeIdsToNames(dto.categories, categories),
+      this.decodeIdsToNames(dto.typepost, typespost),
     );
   }
 
-  fromPostDtoList(dtos: PostDto[],images: TaxonomyDto[]): Post[] {
-    return dtos.map(dto => this.fromPostDto(dto, images));
+  fromPostDtoList(dtos: PostDto[],images: TaxonomyDto[], categories: TaxonomyDto[], typespost: TaxonomyDto[]): Post[] {
+    return dtos.map(dto => this.fromPostDto(dto, images, categories,typespost));
   }
   
 
@@ -118,12 +119,9 @@ fromPublicationDto(
         fullName,
         imageLink
       );
-
-      console.log('PeopleModel mappato:', model);
       return model;
     });
 
-  console.log('PeopleModel[] finale:', peopleModels);
   return peopleModels;
 }
 

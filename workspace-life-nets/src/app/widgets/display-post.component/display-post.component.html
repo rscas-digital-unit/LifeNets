@@ -2,8 +2,8 @@
     [attr.data-link]="post.link">
     <div class="Card__top">
 
-        <div class="Tag Tag__top d-flex gap-2 flex-wrap">
-            <span>Flexibility in power markets</span>
+        <div class="Tag Tag__top d-flex gap-2 flex-wrap" *ngIf="post.categories">
+            <span [innerHTML]="post.categories[0]"></span>
         </div>
 
         <img class="Img Img__top"
@@ -13,31 +13,15 @@
     <div class="Card__bottom">
         <div class="Card__content">
             <div class="Card__content--meta">
+                      <div class="Card__content--cpt">
+        {{ post.typePost }}
+      </div>
+
                 <div class="Card__content--title" [innerHTML]="post.title"></div>
                 <div class="Card__content--text mb-0 d-none d-lg-block" [innerHTML]="post.description"></div>
             </div>
         </div>
-    </div>
-    <div class="Authors">
-
-        <h5 class="Authors__title small">Authors</h5>
-        <div class="d-flex align-items-center">
-            <div class="avatar-group mb-1">
-
-                <a href="https://fsr.eui.eu/people/beckstedde/" class="avatar avatar-circle" data-bs-toggle="tooltip"
-                    data-bs-placement="top" data-bs-title="Ellen Beckstedde">
-                    <img class="avatar-img" src="https://fsr.eui.eu/wp-content/uploads/2023/08/Ellen-Beckstedde.jpg"
-                        alt="Ellen Beckstedde">
-                </a>
-
-                <a href="https://fsr.eui.eu/people/rossetto/" class="avatar avatar-circle" data-bs-toggle="tooltip"
-                    data-bs-placement="top" data-bs-title="Nicolò Rossetto">
-                    <img class="avatar-img" src="https://fsr.eui.eu/wp-content/uploads/2016/10/Nicolo-Rossetto.jpg"
-                        alt="Nicolò Rossetto">
-                </a>
-
-            </div>
-        </div>
-
+    
+    
     </div>
 </div>

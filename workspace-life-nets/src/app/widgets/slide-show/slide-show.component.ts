@@ -35,7 +35,6 @@ export class SlideShowComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['items']) {
-      console.log('items changed:', changes['items'].currentValue);
       const swiper = this.swiperEl.nativeElement.swiper;
       this.updateNavigationState(swiper);
     }
@@ -52,10 +51,7 @@ export class SlideShowComponent implements AfterViewInit, OnChanges {
     this.swiperEl.nativeElement.swiper.on('slideChange', () => {
       this.updateNavigationState(swiper);
     });
-
-    console.log("items");
-    console.log(this.items);
-  }
+}
 
   next(): void {
     this.swiperEl.nativeElement.swiper.slideNext();
@@ -66,7 +62,6 @@ export class SlideShowComponent implements AfterViewInit, OnChanges {
   }
 
   private updateNavigationState(swiper: any): void {
-    console.log("NUMERO ITEMS: " + this.items.length);
     this.isBeginning = swiper.activeIndex <= 0;
     this.isEnd = (swiper.activeIndex >= this.items.length - 3);
   }

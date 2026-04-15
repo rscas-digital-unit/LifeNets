@@ -75,7 +75,6 @@ loadPublications(): void {
         dto => dto.categories
       );
 
-      // ✅ MERGE authors + editors in UNA sola lista
       const peopleIdsString = this.mapperService.extractUniqueAsString(
         dtos,
         dto => [
@@ -93,7 +92,6 @@ loadPublications(): void {
       });
     }),
 
-    // 🔹 Secondo stadio: dai people ricavo i loro featured_media
     switchMap(({ dtos, media, tags, categories, people }) => {
 
       const peopleMediaString = this.mapperService.extractPeopleFeaturedMediaAsString(
@@ -111,7 +109,6 @@ loadPublications(): void {
 
     }),
 
-    // 🔹 Mapping finale
     tap(({ dtos, media, tags, categories, people, peopleMedia }) => {
       this.publications = this.mapperService.fromPublicationDtoList(
         dtos,
@@ -131,33 +128,54 @@ loadPublications(): void {
 }
 
 
-loadPosts(){
+loadPosts(): void {
   this.api.getPosts().pipe(
 
-  switchMap(dtos => {
-    const featuredMediaString = this.mapperService.extractUniqueAsString(
-      dtos,
-      dto => dto.featured_media
-    );
+    // 🔹 Primo livello: DTO + media post + people (autori)
+    switchMap(dtos => {
+      console.log("POST DTO");
+      console.log(dtos);
+      const featuredMediaString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => dto.featured_media
+      );
 
-    return forkJoin({
-      dtos: of(dtos),
-      media: this.api.getList('media', featuredMediaString)
-    });
-  }),
+      const categoriesString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => dto.categories
+      );
 
-  tap(({ dtos, media }) => {
-    this.posts = this.mapperService.fromPostDtoList(dtos, media);
-  })
+     const typePostString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => dto.typepost
+      );
 
-).subscribe({
-  error: error => {
-    console.error('Errore caricamento post', error);
-  }
-});
+      return forkJoin({
+        dtos: of(dtos),
+        media: this.api.getList('media', featuredMediaString),
+        categories: this.api.getList('categories', categoriesString),
+        typepost: this.api.getList('typepost', typePostString)
+      });
 
+
+    }),
+
+  tap(({ dtos, media,categories,typepost }) => {
+   
+      this.posts = this.mapperService.fromPostDtoList(
+        dtos,
+        media,
+        categories,
+        typepost
+      );
+    })
+
+  ).subscribe({
+    error: error => {
+      console.error('Errore caricamento post', error);
+    }
+  });
 }
-
 
   load(): void {
     this.api.loginWithTechnicalUser()

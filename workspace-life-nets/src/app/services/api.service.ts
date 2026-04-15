@@ -169,7 +169,8 @@ getList(listName:string, include:string): Observable<TaxonomyDto[]>{
 
 
 getPeopleList( include:string): Observable<PeopleDto[]>{
-  console.log("TOKEN "+this.token)
+  console.log("TOKEN "+this.token);
+  console.log("INCLUDE "+include);
   return this.http.get<PeopleDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/people',
     {
@@ -183,7 +184,7 @@ getPeopleList( include:string): Observable<PeopleDto[]>{
   )
 .pipe(
     tap(response => {
-      console.log('GET people response:', response);
+      console.log('GET people '+include+' response:', response);
     })
   );
 
