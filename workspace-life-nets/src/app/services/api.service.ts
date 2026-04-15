@@ -10,6 +10,7 @@ import { EventDto } from '../models/api/event-dto.model';
 import { PublicationDto } from '../models/api/pubblication-dto.model';
 import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
 import { PostDto } from '../models/api/post-dto.model';
+import { PeopleDto } from '../models/api/people-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -161,6 +162,28 @@ getList(listName:string, include:string): Observable<TaxonomyDto[]>{
 .pipe(
     tap(response => {
       console.log('GET '+listName+' response:', response);
+    })
+  );
+
+}
+
+
+getPeopleList( include:string): Observable<PeopleDto[]>{
+  console.log("TOKEN "+this.token)
+  return this.http.get<PeopleDto[]>(
+    this.apiBaseUrl+'wp-json/wp/v2/people',
+    {
+      headers: {
+        Authorization: `Bearer ${this.token}`
+      },
+      params: {
+        include: include
+      }
+    }
+  )
+.pipe(
+    tap(response => {
+      console.log('GET people response:', response);
     })
   );
 

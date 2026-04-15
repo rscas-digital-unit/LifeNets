@@ -6,6 +6,7 @@ import { Publication } from '../models/publication.model';
 import { Post } from '../models/post.model';
 import { CardModel } from '../models/card.model';
 import { MapperService } from '../mappers/mapper-service';
+import { forkJoin, of, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,146 @@ export class ItemsRepositoryService {
   private posts: Post[] = [];
 
   constructor(private api: ApiService, private mapperService: MapperService) { }
+
+
+loadEvents(){
+  this.api.getEvents().pipe(
+
+  switchMap(dtos => {
+    const typesString = this.mapperService.extractUniqueAsString(
+      dtos,
+      dto => dto.event_type
+    );
+
+    const featuredMediaString = this.mapperService.extractUniqueAsString(
+      dtos,
+      dto => dto.featured_media
+    );
+
+    return forkJoin({
+      dtos: of(dtos),
+      types: this.api.getList('event_type', typesString),
+      media: this.api.getList('media', featuredMediaString)
+    });
+  }),
+
+  tap(({ dtos, types, media }) => {
+    this.events = this.mapperService.fromEventDtoList(dtos, types, media);
+  })
+
+).subscribe({
+  error: error => {
+    console.error('Errore caricamento eventi', error);
+  }
+});
+
+}
+
+
+loadPublications(): void {
+  this.api.getPubblications().pipe(
+
+    // 🔹 Primo stadio: carico publications + decodifiche dirette
+    switchMap(dtos => {
+
+      const featuredMediaString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => dto.featured_media
+      );
+
+      const featuredTagsString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => dto.tags
+      );
+
+      const featuredCategoriesString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => dto.categories
+      );
+
+      // ✅ MERGE authors + editors in UNA sola lista
+      const peopleIdsString = this.mapperService.extractUniqueAsString(
+        dtos,
+        dto => [
+          ...(dto.acf.authors_relationship ?? []),
+          ...(dto.acf.editors_relationship ?? [])
+        ]
+      );
+
+      return forkJoin({
+        dtos: of(dtos),
+        media: this.api.getList('media', featuredMediaString),
+        tags: this.api.getList('tags', featuredTagsString),
+        categories: this.api.getList('categories', featuredCategoriesString),
+        people: this.api.getPeopleList(peopleIdsString)
+      });
+    }),
+
+    // 🔹 Secondo stadio: dai people ricavo i loro featured_media
+    switchMap(({ dtos, media, tags, categories, people }) => {
+
+      const peopleMediaString = this.mapperService.extractPeopleFeaturedMediaAsString(
+        people
+      );
+
+      return forkJoin({
+        dtos: of(dtos),
+        media: of(media),          
+        tags: of(tags),            
+        categories: of(categories),
+        people: of(people),        
+        peopleMedia: this.api.getList('media', peopleMediaString)
+      });
+
+    }),
+
+    // 🔹 Mapping finale
+    tap(({ dtos, media, tags, categories, people, peopleMedia }) => {
+      this.publications = this.mapperService.fromPublicationDtoList(
+        dtos,
+        media,
+        tags,
+        categories,
+        people,
+        peopleMedia
+      );
+    })
+
+  ).subscribe({
+    error: error => {
+      console.error('Errore caricamento publications', error);
+    }
+  });
+}
+
+
+loadPosts(){
+  this.api.getPosts().pipe(
+
+  switchMap(dtos => {
+    const featuredMediaString = this.mapperService.extractUniqueAsString(
+      dtos,
+      dto => dto.featured_media
+    );
+
+    return forkJoin({
+      dtos: of(dtos),
+      media: this.api.getList('media', featuredMediaString)
+    });
+  }),
+
+  tap(({ dtos, media }) => {
+    this.posts = this.mapperService.fromPostDtoList(dtos, media);
+  })
+
+).subscribe({
+  error: error => {
+    console.error('Errore caricamento post', error);
+  }
+});
+
+}
+
 
   load(): void {
     this.api.loginWithTechnicalUser()
@@ -33,63 +174,9 @@ export class ItemsRepositoryService {
               }
             });
 
-
-
-          this.api.getPubblications().subscribe({
-            next: (dtos) => {
-              this.publications = this.mapperService.fromPublicationDtoList(dtos);
-              console.log('Publications caricati e mappati', this.publications);
-            },
-            error: (error) => {
-              console.error('Errore Get Publications', error);
-            }
-          });
-
-
-
-
-          this.api.getEvents().subscribe({
-            next: (dtos) => {
-              const typesString = this.mapperService.extractUniqueEventsTypesAsString(dtos);
-              this.api.getList('event_type', typesString)
-                .subscribe({
-                  next: (types) => {
-                    console.log('Get Event Types effettuato');
-                    const featuredMediaString = this.mapperService.extractUniqueEventsFeaturedMediaAsString(dtos);
-                    this.api.getList('media', featuredMediaString)
-                      .subscribe({
-                        next: (media) => {
-                          console.log('Get featured Media effettuato');
-                          this.events = this.mapperService.fromEventDtoList(dtos, types, media);
-                        },
-                        error: error => {
-                          console.error('Errore Get Posts', error);
-                        }
-                      });
-                  },
-                  error: error => {
-                    console.error('Errore Get Event Types', error);
-                  }
-                });
-
-            },
-            error: (error) => {
-              console.error('Errore Get Events', error);
-            }
-          });
-
-
-          this.api.getPosts()
-            .subscribe({
-              next: (dtos)  => {
-                 this.posts = this.mapperService.fromPostDtoList(dtos);
-             
-                console.log('Get Posts effettuato');
-              },
-              error: error => {
-                console.error('Errore Get Posts', error);
-              }
-            });
+            this.loadEvents();
+            this.loadPublications();
+            this.loadPosts();
 
           this.api.getAdvertisings()
             .subscribe({

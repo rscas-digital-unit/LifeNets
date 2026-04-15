@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Publication } from '../../models/publication.model';
+
 
 @Component({
   selector: 'app-display-publication',
@@ -11,4 +12,7 @@ import { Publication } from '../../models/publication.model';
 })
 export class DisplayPublicationComponent {
   @Input() publication!: Publication;
+
+  
+
 }

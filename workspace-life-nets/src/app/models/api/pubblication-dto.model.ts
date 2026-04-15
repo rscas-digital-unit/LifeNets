@@ -20,6 +20,11 @@ export interface PublicationDto {
     protected: boolean;
   };
 
+  excerpt: {
+    rendered: string;
+    protected: boolean;
+  };
+  
   guid: {
     rendered: string;
   };

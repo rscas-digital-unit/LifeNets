@@ -1,5 +1,5 @@
 <div class="Card Card__article h-100"
-    data-link="https://fsr.eui.eu/flexibility-in-power-systems-whats-there-beyond-the-buzzword/">
+    [attr.data-link]="post.link">
     <div class="Card__top">
 
         <div class="Tag Tag__top d-flex gap-2 flex-wrap">
@@ -7,15 +7,14 @@
         </div>
 
         <img class="Img Img__top"
-            src="https://fsr.eui.eu/wp-content/uploads/2026/03/thomas-despeyroux-Dh5pUa2PwrY-unsplash-1024x683.jpg"
-            alt="{{post.title}}" loading="lazy">
+            [src]="post.image"
+            [alt]="post.title" loading="lazy">
     </div>
     <div class="Card__bottom">
         <div class="Card__content">
             <div class="Card__content--meta">
-                <div class="Card__content--title">{{post.title}}</div>
-                <div class="Card__content--text mb-0 d-none d-lg-block">The increasing penetration of intermittent
-                    renewable energy sources, together with the ele...</div>
+                <div class="Card__content--title" [innerHTML]="post.title"></div>
+                <div class="Card__content--text mb-0 d-none d-lg-block" [innerHTML]="post.description"></div>
             </div>
         </div>
     </div>
