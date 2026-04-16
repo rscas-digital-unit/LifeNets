@@ -66,7 +66,9 @@ export class SlideShowComponent implements AfterViewInit, OnChanges {
   }
 
 
-
+getSlidesPerView(): number {
+  return window.innerWidth < 768 ? 1.3 : 3;
+}
 
 
 }

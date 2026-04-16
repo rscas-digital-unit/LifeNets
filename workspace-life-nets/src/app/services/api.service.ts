@@ -12,6 +12,7 @@ import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
 import { PostDto } from '../models/api/post-dto.model';
 import { PeopleDto } from '../models/api/people-dto.model';
 import { AdvertisingDto } from '../models/api/advertising-dto';
+import { PagesDto } from '../models/api/pages-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -147,6 +148,28 @@ getAdvertisings():Observable<AdvertisingDto[]> {
 }
 
 
+getPages():Observable<PagesDto> {
+  //console.log("TOKEN "+this.token)
+  return this.http.get<PagesDto>(
+    this.apiBaseUrl+'wp-json/wp/v2/pages/49631',
+    {
+      headers: {
+        Authorization: `Bearer ${this.token}`
+      },
+      params: {
+        tags: this.projectTagId
+      }
+    }
+  )
+.pipe(
+    tap(response => {
+      //console.log('GET by pages response:', response);
+    })
+  );
+
+}
+
+
 getList(listName:string, include:string): Observable<TaxonomyDto[]>{
   //console.log("TOKEN "+this.token)
   return this.http.get<TaxonomyDto[]>(
@@ -191,7 +214,7 @@ getPeopleList( include:string): Observable<PeopleDto[]>{
 
 }
 
-
+/*
 getTags(include:string) {
   //console.log("TOKEN "+this.token)
   return this.http.get(

@@ -12,14 +12,30 @@ import { People } from '../../models/people.model';
 import { DecoderService } from './decoder-service';
 import { Advertising } from '../../models/advertising.model';
 import { AdvertisingDto } from '../../models/api/advertising-dto';
+import { PagesDto } from '../../models/api/pages-dto.model';
+import { HeroModel } from '../../models/hero.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapperService {
+  
  
 
   constructor(private decoderService: DecoderService) { }
+
+
+
+
+fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
+     return new HeroModel(
+      dtos.acf.hero.title,
+       dtos.acf.hero.description,
+       dtos.acf.hero.button_link_text,
+       dtos.acf.hero.button_link,
+      this.decoderService.decodeIdToSourceurl(dtos.featured_media,media)
+    );
+  }
 
  fromAdvertisingDto(dto: AdvertisingDto, images: TaxonomyDto[]): Event {
     

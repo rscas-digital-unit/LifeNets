@@ -11,7 +11,7 @@ export interface TaxonomyDto {
   acf: any[];
 
   meta: any[];
-
+ source_url: string;
   yoast_head: string;
 
   yoast_head_json: {

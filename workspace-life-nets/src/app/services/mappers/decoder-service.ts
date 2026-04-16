@@ -35,6 +35,12 @@ decodeIdToLink(id: number | string, taxonomy: TaxonomyDto[]): string {
   return match ? match.link : '';
 }
 
+decodeIdToSourceurl(id: number | string, taxonomy: TaxonomyDto[]): string {
+  const numericId = Number(id);
+  const match = taxonomy.find(type => type.id === numericId);
+  return match ? match.source_url : '';
+}
+
 
   formatDateShort(dateIso: string): string {
   const date = new Date(dateIso);
@@ -97,6 +103,7 @@ extractPeopleFeaturedMediaAsString(people: PeopleDto[]): string {
 
   return Array.from(uniqueMedia).join(',');
 }
+
 
 extractUniqueAsString<T>(
   items: T[],

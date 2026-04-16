@@ -11,6 +11,8 @@ import { forkJoin, of, switchMap, tap } from 'rxjs';
 import { Advertising } from '../models/advertising.model';
 import { MapperService } from './mappers/mapper-service';
 import { DecoderService } from './mappers/decoder-service';
+import { HeroModel } from '../models/hero.model';
+import { PagesDto } from '../models/api/pages-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +23,37 @@ export class ItemsRepositoryService {
   private publications: Publication[] = [];
   private posts: Post[] = [];
   private advertisings: Advertising[] = [];
+  private hero?: HeroModel;
 
   constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) { }
 
+  
+
+loadPages(){
+  this.api.getPages().pipe(
+  switchMap(dto => {
+
+    const featuredMediaString = this.decoderService.extractUniqueAsString(
+      [dto],
+      (page: PagesDto) => page.featured_media
+    );
+    return forkJoin({
+      dto: of(dto),
+      media: this.api.getList('media', featuredMediaString)
+    });
+  }),
+
+  tap(({ dto,  media }) => {
+    this.hero = this.mapperService.fromPagesDtoToHero(dto,  media);
+  })
+
+).subscribe({
+  error: error => {
+    console.error('Errore caricamento hero', error);
+  }
+});
+
+}
 
 loadEvents(){
   this.api.getEvents().pipe(
@@ -226,7 +256,7 @@ loadPosts(): void {
                 console.error('Errore Validate toker', error);
               }
             });
-
+            this.loadPages();
             this.loadEvents();
             this.loadPublications();
             this.loadPosts();
@@ -240,6 +270,12 @@ loadPosts(): void {
 
 
   }
+
+   
+getHero(): HeroModel | undefined {
+  return this.hero;
+}
+
 
   getPosts(): Post[] {
     return this.posts;
