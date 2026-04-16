@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { SlideShowComponent } from '../../widgets/slide-show/slide-show.component';
 
 
-import { HeaderComponent } from '../../widgets/header.component/header.component';
+import { HeaderComponent } from '../../widgets/header/header.component';
 
-import { FooterComponent } from '../../widgets/footer.component/footer.component';
+import { FooterComponent } from '../../widgets/footer/footer.component';
 import { CallToActionComponent } from '../../widgets/call-to-action/call-to-action.component';
 import { ItemsRepositoryService } from '../../../services/items-repository.service';
 import { CardModel } from '../../../models/card.model';
