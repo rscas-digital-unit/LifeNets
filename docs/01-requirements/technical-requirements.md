@@ -252,7 +252,53 @@ GET /media/{id}
 
 ---
 
-## 10. Data Normalization (MANDATORY)
+## 10. Page Content (Hero & Static Sections)
+
+### Endpoint
+
+```
+GET /pages/49631
+```
+
+---
+
+### Purpose
+
+This endpoint provides the **main static content of the landing page**, including:
+
+- Hero section content
+- About section content
+- Additional structured content (tabs, texts, etc.)
+
+---
+
+### Fields Mapping
+
+| Field | Source |
+|------|--------|
+| hero_title | `acf.hero.title` |
+| hero_description | `acf.hero.description` |
+| hero_cta_text | `acf.hero.button_link_text` |
+| hero_cta_link | `acf.hero.button_link` |
+| about_left_text | `acf.about_page.left_text` |
+| about_right_text | `acf.about_page.right_text` |
+| about_content | `acf.about_page.content` |
+| about_tabs | `acf.about_page.tabs` |
+| hero_background | `featured_media` |
+
+---
+
+### Media Handling
+
+To retrieve the hero background image (use the fullsize resolution):
+
+```
+GET /media/{featured_media}
+```
+
+---
+
+## 11. Data Normalization (MANDATORY)
 
 WordPress responses must NOT be used directly in UI components.
 
@@ -276,7 +322,7 @@ All content types must be mapped into this structure.
 
 ---
 
-## 11. API Architecture (CRITICAL)
+## 12. API Architecture (CRITICAL)
 
 ### Required Services
 
@@ -297,7 +343,7 @@ All content types must be mapped into this structure.
 
 ---
 
-## 12. Backend Abstraction (SCALABILITY)
+## 13. Backend Abstraction (SCALABILITY)
 
 The application must support future backend replacement.
 
@@ -320,7 +366,7 @@ class WordpressAdapter implements ContentAdapter {}
 
 ---
 
-## 13. Performance and Caching Guidelines
+## 14. Performance and Caching Guidelines
 
 ### General Rules
 
@@ -379,7 +425,7 @@ class WordpressAdapter implements ContentAdapter {}
 
 ---
 
-## 14. UI Behaviour Requirements
+## 15. UI Behaviour Requirements
 
 Cards must:
 
@@ -396,7 +442,7 @@ Main sections:
 
 ---
 
-## 15. Error Handling
+## 16. Error Handling
 
 The application must handle:
 
@@ -407,7 +453,7 @@ The application must handle:
 
 ---
 
-## 16. Future-Proof Requirements
+## 17. Future-Proof Requirements
 
 The system must support:
 
@@ -418,7 +464,7 @@ The system must support:
 
 ---
 
-## 17. Development Principles
+## 18. Development Principles
 
 The implementation must ensure:
 
@@ -433,7 +479,7 @@ The implementation must ensure:
 
 ---
 
-## 18. Key Architectural Constraint
+## 19. Key Architectural Constraint
 
 The frontend must be designed as a **content aggregation layer**, not as a WordPress-dependent frontend.
 
