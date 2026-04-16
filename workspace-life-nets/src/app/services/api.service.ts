@@ -11,6 +11,7 @@ import { PublicationDto } from '../models/api/pubblication-dto.model';
 import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
 import { PostDto } from '../models/api/post-dto.model';
 import { PeopleDto } from '../models/api/people-dto.model';
+import { AdvertisingDto } from '../models/api/advertising-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +37,9 @@ export class ApiService {
       .post<any>(this.authUrl+'wp-json/jwt-auth/v1/token', this.technicalUser)
       .pipe(
         tap(response => {
-          console.log('POST response:', response);
+          //console.log('POST response:', response);
           this.token = response.token;
-          console.log('POST token:', this.token);
+          //console.log('POST token:', this.token);
         })
       );
   }
@@ -58,7 +59,7 @@ validateToken() {
 }
 
 getPubblications(): Observable<PublicationDto[]> {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get<PublicationDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/publication',
     {
@@ -72,7 +73,7 @@ getPubblications(): Observable<PublicationDto[]> {
   )
 .pipe(
     tap(response => {
-      console.log('GET by tag response:', response);
+      //console.log('GET by tag response:', response);
     })
   );
 
@@ -80,7 +81,7 @@ getPubblications(): Observable<PublicationDto[]> {
 
 
 getEvents(): Observable<EventDto[]> {
-  console.log('TOKEN', this.token);
+  //console.log('TOKEN', this.token);
 
   return this.http.get<EventDto[]>(
 
@@ -96,14 +97,14 @@ getEvents(): Observable<EventDto[]> {
   )
 .pipe(
     tap(response => {
-      console.log('GET by tag response:', response);
+      //console.log('GET by tag response:', response);
     })
   );
 
 }
 
 getPosts(): Observable<PostDto[]> {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get<PostDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/posts',
     {
@@ -117,16 +118,16 @@ getPosts(): Observable<PostDto[]> {
   )
 .pipe(
     tap(response => {
-      console.log('GET by tag response:', response);
+      //console.log('GET by tag response:', response);
     })
   );
 
 }
 
 
-getAdvertisings() {
-  console.log("TOKEN "+this.token)
-  return this.http.get(
+getAdvertisings():Observable<AdvertisingDto[]> {
+  //console.log("TOKEN "+this.token)
+  return this.http.get<AdvertisingDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/advertising',
     {
       headers: {
@@ -147,7 +148,7 @@ getAdvertisings() {
 
 
 getList(listName:string, include:string): Observable<TaxonomyDto[]>{
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get<TaxonomyDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/'+listName,
     {
@@ -161,7 +162,7 @@ getList(listName:string, include:string): Observable<TaxonomyDto[]>{
   )
 .pipe(
     tap(response => {
-      console.log('GET '+listName+' response:', response);
+      //console.log('GET '+listName+' response:', response);
     })
   );
 
@@ -169,8 +170,8 @@ getList(listName:string, include:string): Observable<TaxonomyDto[]>{
 
 
 getPeopleList( include:string): Observable<PeopleDto[]>{
-  console.log("TOKEN "+this.token);
-  console.log("INCLUDE "+include);
+  //console.log("TOKEN "+this.token);
+  //console.log("INCLUDE "+include);
   return this.http.get<PeopleDto[]>(
     this.apiBaseUrl+'wp-json/wp/v2/people',
     {
@@ -184,7 +185,7 @@ getPeopleList( include:string): Observable<PeopleDto[]>{
   )
 .pipe(
     tap(response => {
-      console.log('GET people '+include+' response:', response);
+      //console.log('GET people '+include+' response:', response);
     })
   );
 
@@ -192,7 +193,7 @@ getPeopleList( include:string): Observable<PeopleDto[]>{
 
 
 getTags(include:string) {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get(
     this.apiBaseUrl+'wp-json/wp/v2/tags',
     {
@@ -206,14 +207,14 @@ getTags(include:string) {
   )
 .pipe(
     tap(response => {
-      console.log('GET tags response:', response);
+      //console.log('GET tags response:', response);
     })
   );
 
 }
 
 getCategories(include:string) {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get(
     this.apiBaseUrl+'wp-json/wp/v2/categories',
     {
@@ -227,7 +228,7 @@ getCategories(include:string) {
   )
 .pipe(
     tap(response => {
-      console.log('GET categories response:', response);
+      //console.log('GET categories response:', response);
     })
   );
 
@@ -235,7 +236,7 @@ getCategories(include:string) {
 
 
 getPeople(id:string) {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get(
     this.apiBaseUrl+'wp-json/wp/v2/people/'+id,
     {
@@ -246,7 +247,7 @@ getPeople(id:string) {
   )
 .pipe(
     tap(response => {
-      console.log('GET people response:', response);
+      //console.log('GET people response:', response);
     })
   );
 
@@ -254,7 +255,7 @@ getPeople(id:string) {
 
 
 getMedia(id:string) {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get(
     this.apiBaseUrl+'wp-json/wp/v2/media/'+id,
     {
@@ -265,7 +266,7 @@ getMedia(id:string) {
   )
 .pipe(
     tap(response => {
-      console.log('GET media response:', response);
+      //console.log('GET media response:', response);
     })
   );
 
@@ -276,7 +277,7 @@ getMedia(id:string) {
 
 
 getEventType(include:string) {
-  console.log("TOKEN "+this.token)
+  //console.log("TOKEN "+this.token)
   return this.http.get(
     this.apiBaseUrl+'wp-json/wp/v2/event_type',
     {
@@ -290,7 +291,7 @@ getEventType(include:string) {
   )
 .pipe(
     tap(response => {
-      console.log('GET event_type response:', response);
+      //console.log('GET event_type response:', response);
     })
   );
 

@@ -8,23 +8,45 @@ import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
 import { PostDto } from '../models/api/post-dto.model';
 import { Post } from '../models/post.model';
 import { PeopleDto } from '../models/api/people-dto.model';
-import { PeopleModel } from '../models/people.model';
+import { People } from '../models/people.model';
+import { DecoderService } from './decoder-service';
+import { AdvertisingDto } from '../models/api/advertising-dto';
+import { Advertising } from '../models/advertising.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapperService {
+ 
+
+  constructor(private decoderService: DecoderService) { }
+
+ fromAdvertisingDto(dto: AdvertisingDto, images: TaxonomyDto[]): Event {
+    
+    return new Advertising(
+      dto.id,
+      this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? '',
+      this.decoderService.extractPlainTextPreview(dto.acf.description) ??  '',
+      dto.link,
+      this.decoderService.decodeIdToLink(dto.featured_media,images)
+    );
+    
+  }
+
+ fromAdvertisingDtoList(dtos: AdvertisingDto[], images: TaxonomyDto[]): Event[] {
+    return dtos.map(dto => this.fromAdvertisingDto(dto,images));
+  }
 
   fromEventDto(dto: EventDto,eventTypes: TaxonomyDto[],images: TaxonomyDto[]): Event {
     
     return new Event(
       dto.id,
-      this.decodeHtmlEntities(dto.title?.rendered) ?? this.decodeHtmlEntities(dto.acf?.title) ?? '',
-      this.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
+      this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? this.decoderService.decodeHtmlEntities(dto.acf?.title) ?? '',
+      this.decoderService.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.decoderService.extractPlainTextPreview(dto.content?.rendered ?? ''),
       dto.link,
-      this.formatDateShort(dto.date),
-      this.decodeIdToName(dto.event_type,eventTypes),
-      this.decodeIdToLink(dto.featured_media,images)
+      this.decoderService.formatDateShort(dto.date),
+      this.decoderService.decodeIdToName(dto.event_type,eventTypes),
+      this.decoderService.decodeIdToLink(dto.featured_media,images)
     );
   }
 
@@ -54,13 +76,13 @@ fromPublicationDto(
 
   return new Publication(
     dto.id,
-    this.decodeHtmlEntities(dto.title?.rendered) ?? '',
-    this.extractPlainTextPreview(dto.excerpt?.rendered)
-      ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
+    this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? '',
+    this.decoderService.extractPlainTextPreview(dto.excerpt?.rendered)
+      ?? this.decoderService.extractPlainTextPreview(dto.content?.rendered ?? ''),
     dto.link,
-    this.decodeIdToLink(dto.featured_media, images),
-    this.decodeIdsToNames(dto.tags, tags),
-    this.decodeIdsToNames(dto.categories, categories),
+    this.decoderService.decodeIdToLink(dto.featured_media, images),
+    this.decoderService.decodeIdsToNames(dto.tags, tags),
+    this.decoderService.decodeIdsToNames(dto.categories, categories),
     dto.acf['pub-type'],
     peopleModels
   );
@@ -75,12 +97,12 @@ fromPublicationDto(
     
     return new Post(
       dto.id,
-      this.decodeHtmlEntities(dto.title?.rendered) ?? '',
-      this.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.extractPlainTextPreview(dto.content?.rendered ?? ''),
+      this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? '',
+      this.decoderService.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.decoderService.extractPlainTextPreview(dto.content?.rendered ?? ''),
       dto.link,
-      this.decodeIdToLink(dto.featured_media,images),
-      this.decodeIdsToNames(dto.categories, categories),
-      this.decodeIdsToNames(dto.typepost, typespost),
+      this.decoderService.decodeIdToLink(dto.featured_media,images),
+      this.decoderService.decodeIdsToNames(dto.categories, categories),
+      this.decoderService.decodeIdsToNames(dto.typepost, typespost),
     );
   }
 
@@ -94,11 +116,11 @@ fromPublicationDto(
   people: PeopleDto[],
   relatedPeopleIds: number[],
   peopleMedia: TaxonomyDto[]
-): PeopleModel[] {
+): People[] {
 
   const idsSet = new Set<number>(relatedPeopleIds);
 
-  const peopleModels: PeopleModel[] = people
+  const peopleModels: People[] = people
     .filter(person => idsSet.has(person.id))
     .map(person => {
 
@@ -109,12 +131,12 @@ fromPublicationDto(
         .filter(Boolean)
         .join(' ');
 
-      const imageLink = this.decodeIdToLink(
+      const imageLink = this.decoderService.decodeIdToLink(
         person.featured_media,
         peopleMedia
       );
 
-      const model = new PeopleModel(
+      const model = new People(
         person.id,
         fullName,
         imageLink
@@ -125,126 +147,5 @@ fromPublicationDto(
   return peopleModels;
 }
 
-decodeIdsToNames(
-  ids: Array<number | string>,
-  taxonomy: TaxonomyDto[]
-): string[] {
-  return ids
-    .map(id => {
-      const numericId = Number(id);
-      const match = taxonomy.find(type => type.id === numericId);
-      return match ? match.name : '';
-    })
-    .filter(name => name !== '');
-}
-
-
-decodeIdToName(id: number | string, taxonomy: TaxonomyDto[]): string {
-  const numericId = Number(id);
-  const match = taxonomy.find(type => type.id === numericId);
-  return match ? match.name : '';
-}
-
-decodeIdToLink(id: number | string, taxonomy: TaxonomyDto[]): string {
-  const numericId = Number(id);
-  const match = taxonomy.find(type => type.id === numericId);
-  return match ? match.link : '';
-}
-
-
-  formatDateShort(dateIso: string): string {
-  const date = new Date(dateIso);
-
-  return new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }).format(date);
-}
-
-
- extractPlainTextPreview(
-  html: string,
-  maxLength = 150
-): string {
-  if(!html) return html;
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-
-  const text = (tempDiv.textContent || '').replace(/\s+/g, ' ').trim();
-
-  if (text.length <= maxLength) {
-    return text;
-  }
-
-  const cut = text.slice(0, maxLength);
-  return cut.slice(0, cut.lastIndexOf(' ')) + '…';
-}
-
- extractUniqueTagsAsString(dtos: EventDto[]): string {
-  const uniqueTags = new Set<number>();
-
-  dtos.forEach(dto => {
-    dto.tags?.forEach(tag => uniqueTags.add(tag));
-  });
-
-  return Array.from(uniqueTags).join(', ');
-}
-
- extractUniqueEventsTypesAsString(dtos: EventDto[]): string {
-  const uniqueEventsTypes = new Set<number>();
-
-  dtos.forEach(dto => {
-     uniqueEventsTypes.add(dto.event_type);
-  });
-
-  return Array.from(uniqueEventsTypes).join(',');
-}
-
-
-extractPeopleFeaturedMediaAsString(people: PeopleDto[]): string {
-  const uniqueMedia = new Set<number>();
-
-  people.forEach(person => {
-    if (typeof person.featured_media === 'number' && person.featured_media > 0) {
-      uniqueMedia.add(person.featured_media);
-    }
-  });
-
-  return Array.from(uniqueMedia).join(',');
-}
-
-extractUniqueAsString<T>(
-  items: T[],
-  selector: (item: T) => number | number[] | null | undefined
-): string {
-  const uniqueValues = new Set<number>();
-
-  items.forEach(item => {
-    const value = selector(item);
-
-    if (Array.isArray(value)) {
-      value.forEach(v => {
-        if (typeof v === 'number') {
-          uniqueValues.add(v);
-        }
-      });
-    } else if (typeof value === 'number') {
-      uniqueValues.add(value);
-    }
-  });
-
-  return Array.from(uniqueValues).join(',');
-}
-
-decodeHtmlEntities(text: string): string {
-  if (!text) {
-    return '';
-  }
-
-  const textarea = document.createElement('textarea');
-  textarea.innerHTML = text;
-  return textarea.value;
-}
 
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Advertising } from '../../models/advertising.model';
 
 @Component({
   selector: 'app-call-to-action',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './call-to-action.component.css',
 })
 export class CallToActionComponent {
-
+  @Input() advertising!: Advertising;
 }

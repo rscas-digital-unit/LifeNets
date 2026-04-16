@@ -7,6 +7,8 @@ import { Post } from '../models/post.model';
 import { CardModel } from '../models/card.model';
 import { MapperService } from '../mappers/mapper-service';
 import { forkJoin, of, switchMap, tap } from 'rxjs';
+import { DecoderService } from '../mappers/decoder-service';
+import { Advertising } from '../models/advertising.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +18,21 @@ export class ItemsRepositoryService {
   private events: Event[] = [];
   private publications: Publication[] = [];
   private posts: Post[] = [];
+  private advertisings: Advertising[] = [];
 
-  constructor(private api: ApiService, private mapperService: MapperService) { }
+  constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) { }
 
 
 loadEvents(){
   this.api.getEvents().pipe(
 
   switchMap(dtos => {
-    const typesString = this.mapperService.extractUniqueAsString(
+    const typesString = this.decoderService.extractUniqueAsString(
       dtos,
       dto => dto.event_type
     );
 
-    const featuredMediaString = this.mapperService.extractUniqueAsString(
+    const featuredMediaString = this.decoderService.extractUniqueAsString(
       dtos,
       dto => dto.featured_media
     );
@@ -54,28 +57,58 @@ loadEvents(){
 }
 
 
+loadAdvertisings(){
+  this.api.getAdvertisings().pipe(
+
+  switchMap(dtos => {
+
+
+    const featuredMediaString = this.decoderService.extractUniqueAsString(
+      dtos,
+      dto => dto.featured_media
+    );
+
+    return forkJoin({
+      dtos: of(dtos),
+      media: this.api.getList('media', featuredMediaString)
+    });
+  }),
+
+  tap(({ dtos, media }) => {
+    this.advertisings = this.mapperService.fromAdvertisingDtoList(dtos,  media);
+  })
+
+).subscribe({
+  error: error => {
+    console.error('Errore caricamento advertising', error);
+  }
+});
+
+}
+
+
 loadPublications(): void {
   this.api.getPubblications().pipe(
 
     // 🔹 Primo stadio: carico publications + decodifiche dirette
     switchMap(dtos => {
 
-      const featuredMediaString = this.mapperService.extractUniqueAsString(
+      const featuredMediaString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => dto.featured_media
       );
 
-      const featuredTagsString = this.mapperService.extractUniqueAsString(
+      const featuredTagsString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => dto.tags
       );
 
-      const featuredCategoriesString = this.mapperService.extractUniqueAsString(
+      const featuredCategoriesString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => dto.categories
       );
 
-      const peopleIdsString = this.mapperService.extractUniqueAsString(
+      const peopleIdsString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => [
           ...(dto.acf.authors_relationship ?? []),
@@ -94,7 +127,7 @@ loadPublications(): void {
 
     switchMap(({ dtos, media, tags, categories, people }) => {
 
-      const peopleMediaString = this.mapperService.extractPeopleFeaturedMediaAsString(
+      const peopleMediaString = this.decoderService.extractPeopleFeaturedMediaAsString(
         people
       );
 
@@ -133,19 +166,19 @@ loadPosts(): void {
 
     // 🔹 Primo livello: DTO + media post + people (autori)
     switchMap(dtos => {
-      console.log("POST DTO");
-      console.log(dtos);
-      const featuredMediaString = this.mapperService.extractUniqueAsString(
+      //console.log("POST DTO");
+      //console.log(dtos);
+      const featuredMediaString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => dto.featured_media
       );
 
-      const categoriesString = this.mapperService.extractUniqueAsString(
+      const categoriesString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => dto.categories
       );
 
-     const typePostString = this.mapperService.extractUniqueAsString(
+     const typePostString = this.decoderService.extractUniqueAsString(
         dtos,
         dto => dto.typepost
       );
@@ -181,11 +214,11 @@ loadPosts(): void {
     this.api.loginWithTechnicalUser()
       .subscribe({
         next: response => {
-          console.log('Login tecnico effettuato');
+          //console.log('Login tecnico effettuato');
           this.api.validateToken()
             .subscribe({
               next: response => {
-                console.log('Validate toker effettuato');
+                //console.log('Validate toker effettuato');
               },
               error: error => {
                 console.error('Errore Validate toker', error);
@@ -195,17 +228,7 @@ loadPosts(): void {
             this.loadEvents();
             this.loadPublications();
             this.loadPosts();
-
-          this.api.getAdvertisings()
-            .subscribe({
-              next: response => {
-                console.log('Get Advertisings effettuato');
-              },
-              error: error => {
-                console.error('Errore Get Advertisings', error);
-              }
-            });
-
+            this.loadAdvertisings();
 
         },
         error: error => {
@@ -214,18 +237,6 @@ loadPosts(): void {
       });
 
 
-    /*
-        this.api.readEvents().subscribe(events => {
-          this.events = events;
-        });
-
-    this.api.readPublications().subscribe(publications => {
-      this.publications = publications;
-    });
-
-    this.api.readPosts().subscribe(posts => {
-      this.posts = posts;
-    });*/
   }
 
   getPosts(): Post[] {
@@ -240,7 +251,8 @@ loadPosts(): void {
     return this.publications;
   }
 
-  getAllItems(): CardModel[] {
-    return [...this.events, ...this.publications];
+  getAdvertisings(): Advertising[] {
+    return this.advertisings;
   }
+
 }

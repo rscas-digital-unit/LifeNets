@@ -1,5 +1,5 @@
 import { CardModel } from './card.model';
-import { PeopleModel } from './people.model';
+
 
 
 export class Post extends CardModel  {

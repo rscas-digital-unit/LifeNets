@@ -1,11 +1,11 @@
 import { CardModel } from './card.model';
-import { PeopleModel } from './people.model';
+import { People } from './people.model';
 
 
 export class Publication extends CardModel {
 
   pubType?: string;
-  people?: PeopleModel[];
+  people?: People[];
 
   constructor(
     id: number,
@@ -16,7 +16,7 @@ export class Publication extends CardModel {
     tags?: string[],
     categories?: string[],
     pubType?: string,
-    people?: PeopleModel[]
+    people?: People[]
   ) {
     super(id, title, description, link);
     this.image = image;

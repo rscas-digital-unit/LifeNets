@@ -1,4 +1,4 @@
-export class PeopleModel {
+export class People {
   id: number;
   name?: string;
   image?: string;
