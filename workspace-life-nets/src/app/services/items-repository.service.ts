@@ -5,10 +5,12 @@ import { Event } from '../models/event.model';
 import { Publication } from '../models/publication.model';
 import { Post } from '../models/post.model';
 import { CardModel } from '../models/card.model';
-import { MapperService } from '../mappers/mapper-service';
+
 import { forkJoin, of, switchMap, tap } from 'rxjs';
-import { DecoderService } from '../mappers/decoder-service';
+
 import { Advertising } from '../models/advertising.model';
+import { MapperService } from './mappers/mapper-service';
+import { DecoderService } from './mappers/decoder-service';
 
 @Injectable({
   providedIn: 'root'

@@ -2,9 +2,8 @@ import { Component, Input, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild, AfterV
 import { CommonModule } from '@angular/common';
 
 import { DisplayItemComponent } from '../display-item/display-item.component';
-import { register } from 'swiper/element/bundle';
-import { Swiper } from 'swiper/types';
-import { CardModel } from '../../models/card.model';
+import { CardModel } from '../../../models/card.model';
+
 
 @Component({
   selector: 'app-slide-show',

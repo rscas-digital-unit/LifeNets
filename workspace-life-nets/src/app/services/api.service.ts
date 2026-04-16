@@ -140,7 +140,7 @@ getAdvertisings():Observable<AdvertisingDto[]> {
   )
 .pipe(
     tap(response => {
-      console.log('GET by tag response:', response);
+      //console.log('GET by tag response:', response);
     })
   );
 

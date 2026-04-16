@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Publication } from '../../models/publication.model';
+import { Publication } from '../../../models/publication.model';
+
 
 
 @Component({

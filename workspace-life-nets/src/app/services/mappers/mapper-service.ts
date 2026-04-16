@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 
-import { Event } from '../models/event.model';
-import { EventDto } from '../models/api/event-dto.model';
-import { PublicationDto } from '../models/api/pubblication-dto.model';
-import { Publication } from '../models/publication.model';
-import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
-import { PostDto } from '../models/api/post-dto.model';
-import { Post } from '../models/post.model';
-import { PeopleDto } from '../models/api/people-dto.model';
-import { People } from '../models/people.model';
+import { Event } from '../../models/event.model';
+import { EventDto } from '../../models/api/event-dto.model';
+import { PublicationDto } from '../../models/api/pubblication-dto.model';
+import { Publication } from '../../models/publication.model';
+import { TaxonomyDto } from '../../models/api/taxonomy-dto.model';
+import { PostDto } from '../../models/api/post-dto.model';
+import { Post } from '../../models/post.model';
+import { PeopleDto } from '../../models/api/people-dto.model';
+import { People } from '../../models/people.model';
 import { DecoderService } from './decoder-service';
-import { AdvertisingDto } from '../models/api/advertising-dto';
-import { Advertising } from '../models/advertising.model';
+import { Advertising } from '../../models/advertising.model';
+import { AdvertisingDto } from '../../models/api/advertising-dto';
 
 @Injectable({
   providedIn: 'root'

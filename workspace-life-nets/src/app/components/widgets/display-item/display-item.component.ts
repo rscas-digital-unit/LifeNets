@@ -2,15 +2,15 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 
-import { Event } from '../../models/event.model';
-import { Post } from '../../models/post.model';
-import { Publication } from '../../models/publication.model';
+import { Event } from '../../../models/event.model';
+import { Post } from '../../../models/post.model';
+import { Publication } from '../../../models/publication.model';
 
 
 import { DisplayEventComponent } from '../display-event/display-event.component';
 import { DisplayPublicationComponent } from '../display-publication/display-publication.component';
-import { DisplayPostComponent } from '../display-post.component/display-post.component';
-import { CardModel } from '../../models/card.model';
+import { DisplayPostComponent } from '../display-post/display-post.component';
+import { CardModel } from '../../../models/card.model';
 
 @Component({
   selector: 'app-display-item',

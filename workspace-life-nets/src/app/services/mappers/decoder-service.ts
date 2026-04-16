@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { PeopleDto } from '../models/api/people-dto.model';
-import { EventDto } from '../models/api/event-dto.model';
-import { TaxonomyDto } from '../models/api/taxonomy-dto.model';
+import { PeopleDto } from '../../models/api/people-dto.model';
+import { EventDto } from '../../models/api/event-dto.model';
+import { TaxonomyDto } from '../../models/api/taxonomy-dto.model';
 
 @Injectable({
   providedIn: 'root',

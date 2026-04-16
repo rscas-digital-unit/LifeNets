@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Advertising } from '../../models/advertising.model';
+import { Advertising } from '../../../models/advertising.model';
+
 
 @Component({
   selector: 'app-call-to-action',

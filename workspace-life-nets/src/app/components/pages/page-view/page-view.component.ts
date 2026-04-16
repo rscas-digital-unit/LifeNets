@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { SlideShowComponent } from '../../widgets/slide-show/slide-show.component';
 
-import { ItemsRepositoryService } from '../../services/items-repository.service';
+
 import { HeaderComponent } from '../../widgets/header.component/header.component';
-import { CallToActionComponent } from '../../widgets/call-to-action.component/call-to-action.component';
+
 import { FooterComponent } from '../../widgets/footer.component/footer.component';
-import { CardModel } from '../../models/card.model';
+import { CallToActionComponent } from '../../widgets/call-to-action/call-to-action.component';
+import { ItemsRepositoryService } from '../../../services/items-repository.service';
+import { CardModel } from '../../../models/card.model';
+
 
 @Component({
   selector: 'app-page-view',
