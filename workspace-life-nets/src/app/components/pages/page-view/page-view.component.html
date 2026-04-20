@@ -2,10 +2,10 @@
 
 <app-header *ngIf="repository.getHero() as hero" [hero]="hero"></app-header>
 
-<app-slide-show [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'"></app-slide-show>
-<app-slide-show [sliderName] = "'Posts'" [items]="this.repository.getPosts()" [buttonText]="'All Blog post'"></app-slide-show>
+<app-slide-show id="Events" [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'"></app-slide-show>
+<app-slide-show id="Posts" [sliderName] = "'Posts'" [items]="this.repository.getPosts()" [buttonText]="'All Blog post'"></app-slide-show>
 <app-call-to-action *ngIf="repository.getAdvertisings()?.length" [advertising]="repository.getAdvertisings()[0]"></app-call-to-action>
-<app-slide-show [sliderName] = "'Publications'" [items]="this.repository.getPublications()" [buttonText]="'All publications'"></app-slide-show>
+<app-slide-show id="Publications" [sliderName] = "'Publications'" [items]="this.repository.getPublications()" [buttonText]="'All publications'"></app-slide-show>
 <ng-container *ngIf="repository.getAdvertisings() as ads"> <app-call-to-action *ngIf="ads.length >= 2" [advertising]="ads[1]"></app-call-to-action></ng-container>
 
 <app-footer></app-footer>

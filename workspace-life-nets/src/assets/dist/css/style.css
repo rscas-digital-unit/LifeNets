@@ -13618,6 +13618,9 @@ h1 {
 /** {
 	outline: 1px solid red;
 }*/
+.going-down header{
+  background: white;
+}
 .going-down header,
 .going-up header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
