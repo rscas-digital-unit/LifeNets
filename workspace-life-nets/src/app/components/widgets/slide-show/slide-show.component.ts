@@ -22,7 +22,8 @@ export class SlideShowComponent implements AfterViewInit, OnChanges {
 
 
   @Input() sliderName: string = "";
-  @Input() buttonText: string = "All Blog post";
+  @Input() buttonText: string = "";
+  @Input() buttonLink: string = "";
 
   @ViewChild('swiperEl', { static: true })
   swiperEl!: ElementRef<any>;
