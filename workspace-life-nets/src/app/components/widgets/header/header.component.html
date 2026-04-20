@@ -1,37 +1,39 @@
-<div class="header__largewrapper position-relative">
-    <div class="header__top d-flex flex-row align-items-center justify-content-end position-relative">
-        <nav>
-            <ul class="list-inline m-0">
-                <li class="list-inline-item ms-4"><a href="https://fsr.eui.eu/about/">About</a></li>
-                <li class="list-inline-item ms-4"><a href="https://fsr.eui.eu/media/">Media Press</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="header__main  d-flex align-items-center justify-content-between position-relative w-100">
-        <a href="/" class="logo" title="Homepage">
-            <img class="logo-icon" src="https://fsr.eui.eu/wp-content/themes/fsr/assets/img/logos/FSR.png"
-                alt="Logo FSR">
-        </a>
-        <nav class="position-relative" style="position: relative;">
-            <ul class="main-nav list-inline m-0">
-                <li class="list-inline-item itemid-47271"><a href="https://fsr.eui.eu/research/">Research</a></li>
-                <li class="list-inline-item itemid-47272"><a href="/executive-education">Executive education</a></li>
-                <li class="list-inline-item itemid-47273"><a href="https://fsr.eui.eu/policy-events/">Policy Events</a>
-                </li>
-                <li class="list-inline-item itemid-47274"><a href="#">More</a></li>
-                <li class="list-inline-item last itemid-search-button" style="cursor: pointer;"><i
-                        class="search__button position-relative fa-sharp fa-light fa-magnifying-glass"
-                        aria-hidden="true"></i></li>
-            </ul>
-            <span class="menu-hover-line hidden" style=""></span>
-            <span class="menu-hover-line hidden" style="transform: translateX(556px); width: 86px;"></span>
-        </nav>
-    </div>
-</div>
+<header class="header header__desktop">
+  <div class="header__largewrapper position-relative">
+      <div class="header__top d-flex flex-row align-items-center justify-content-end position-relative">
+          <nav>
+              <ul class="list-inline m-0">
+                  <li class="list-inline-item ms-4"><a href="https://fsr.eui.eu/about/">About</a></li>
+                  <li class="list-inline-item ms-4"><a href="https://fsr.eui.eu/media/">Media Press</a></li>
+              </ul>
+          </nav>
+      </div>
+      <div class="header__main  d-flex align-items-center justify-content-between position-relative w-100">
+          <a href="/" class="logo" title="Homepage">
+              <img class="logo-icon" src="https://fsr.eui.eu/wp-content/themes/fsr/assets/img/logos/FSR.png"
+                  alt="Logo FSR">
+          </a>
+          <nav class="position-relative" style="position: relative;">
+              <ul class="main-nav list-inline m-0 h-auto">
+                  <li class="list-inline-item itemid-47271 h-auto"><a href="https://fsr.eui.eu/research/">Research</a></li>
+                  <li class="list-inline-item itemid-47272 h-auto"><a href="/executive-education">Executive education</a></li>
+                  <li class="list-inline-item itemid-47273 h-auto"><a href="https://fsr.eui.eu/policy-events/">Policy Events</a>
+                  </li>
+                  <li class="list-inline-item itemid-47274 h-auto"><a href="#">More</a></li>
+                  <li class="list-inline-item last itemid-search-button h-auto" style="cursor: pointer;"><i
+                          class="search__button position-relative fa-sharp fa-light fa-magnifying-glass"
+                          aria-hidden="true"></i></li>
+              </ul>
+              <span class="menu-hover-line hidden" style=""></span>
+              <span class="menu-hover-line hidden" style="transform: translateX(556px); width: 86px;"></span>
+          </nav>
+      </div>
+  </div>
+</header>
 
-<div class="Hero">
+<div class="Hero mb-5">
     <div class="Hero__content h-100" style="">
-    
+
         <div class="Hero__image"
         [style.backgroundImage]="'url(' + hero.image + ')'"
             >
@@ -41,7 +43,7 @@
 
             <h1 class="Hero__title" [textContent]="hero.title"> </h1>
             <p class="mb-0 w-75" [textContent]="hero.description">
-                
+
             </p>
 
         </div>

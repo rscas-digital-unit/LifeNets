@@ -1,14 +1,17 @@
 <app-display-event
+  class="d-flex"
   *ngIf="isEvent(item)"
   [event]="item">
 </app-display-event>
 
 <app-display-publication
+  class="d-flex"
   *ngIf="isPublication(item)"
   [publication]="item">
 </app-display-publication>
 
 <app-display-post
+  class="d-flex"
   *ngIf="isPost(item)"
   [post]="item">
 </app-display-post>

@@ -2,7 +2,6 @@
 
 <app-header *ngIf="repository.getHero() as hero" [hero]="hero"></app-header>
 
-<br><br>
 <app-slide-show [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'"></app-slide-show>
 <app-slide-show [sliderName] = "'Posts'" [items]="this.repository.getPosts()" [buttonText]="'All Blog post'"></app-slide-show>
 <app-call-to-action *ngIf="repository.getAdvertisings()?.length" [advertising]="repository.getAdvertisings()[0]"></app-call-to-action>

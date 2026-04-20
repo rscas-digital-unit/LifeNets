@@ -4,3 +4,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
+swiper-container::part(container) {
+  overflow: visible;
+}

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { HeroModel } from '../../../models/hero.model';
 
 @Component({
@@ -9,4 +9,15 @@ import { HeroModel } from '../../../models/hero.model';
 })
 export class HeaderComponent {
   @Input() hero!: HeroModel;
+
+  private scrollThreshold = 50; // px
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (window.scrollY > this.scrollThreshold) {
+      document.body.classList.add('going-down');
+    } else {
+      document.body.classList.remove('going-down');
+    }
+  }
 }
