@@ -1,27 +1,49 @@
-<div class="Card Card__article h-100"
-    [attr.data-link]="post.link">
+<a
+  class="Card__wrapper text-decoration-none"
+  [href]="post.link"
+  [title]="post.title"
+>
+
+  <div class="Card Card__article h-100">
+
     <div class="Card__top">
 
-        <div class="Tag Tag__top d-flex gap-2 flex-wrap" *ngIf="post.categories">
-            <span [innerHTML]="post.categories[0]"></span>
-        </div>
-
-        <img class="Img Img__top"
-            [src]="post.image"
-            [alt]="post.title" loading="lazy">
-    </div>
-    <div class="Card__bottom">
-        <div class="Card__content">
-            <div class="Card__content--meta">
-                      <div class="Card__content--cpt">
-        {{ post.typePost }}
+      <div
+        class="Tag Tag__top d-flex gap-2 flex-wrap"
+        *ngIf="post.categories"
+      >
+        <span [innerHTML]="post.categories[0]"></span>
       </div>
 
-                <div class="Card__content--title" [innerHTML]="post.title"></div>
-                <div class="Card__content--text mb-0 d-none d-lg-block" [innerHTML]="post.description"></div>
-            </div>
-        </div>
-    
-    
+      <img
+        class="Img Img__top"
+        [src]="post.image"
+        [alt]="post.title"
+        loading="lazy"
+      >
     </div>
-</div>
+
+    <div class="Card__bottom">
+      <div class="Card__content">
+        <div class="Card__content--meta">
+
+          <div class="Card__content--cpt">
+            {{ post.typePost }}
+          </div>
+
+          <div
+            class="Card__content--title"
+            [innerHTML]="post.title"
+          ></div>
+
+          <div
+            class="Card__content--text mb-0 d-none d-lg-block"
+            [innerHTML]="post.description"
+          ></div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</a>
