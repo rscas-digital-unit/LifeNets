@@ -1,6 +1,7 @@
 <!--app-header></app-header-->
 
-<app-header *ngIf="repository.getHero() as hero" [hero]="hero"></app-header>
+<app-header  [hero]="repository.getHero()"></app-header>
+
 
 <app-slide-show id="Events" [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=event'"></app-slide-show>
 <app-slide-show id="Posts" [sliderName] = "'Posts'" [items]="this.repository.getPosts()" [buttonText]="'All Blog post'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=post'"></app-slide-show>

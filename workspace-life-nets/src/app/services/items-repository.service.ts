@@ -23,7 +23,13 @@ export class ItemsRepositoryService {
   private publications: Publication[] = [];
   private posts: Post[] = [];
   private advertisings: Advertising[] = [];
-  private hero?: HeroModel;
+  private hero: HeroModel= new HeroModel(
+    'LIFE NETS',
+    '',
+    '',
+    '',
+    'assets/img/herodefault.jpg' //'https://fsr.eui.eu/wp-content/uploads/2026/04/lifeNetsBackground-scaled.jpg'
+  ) 
 
   constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) { }
 
@@ -272,7 +278,7 @@ loadPosts(): void {
   }
 
    
-getHero(): HeroModel | undefined {
+getHero(): HeroModel  {
   return this.hero;
 }
 
