@@ -14,6 +14,7 @@ import { Advertising } from '../../models/advertising.model';
 import { AdvertisingDto } from '../../models/api/advertising-dto';
 import { PagesDto } from '../../models/api/pages-dto.model';
 import { HeroModel } from '../../models/hero.model';
+import { AboutModel, AboutTabModel } from '../../models/about.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,22 @@ export class MapperService {
 
   constructor(private decoderService: DecoderService) { }
 
-
+fromPagesDtoToAbout(dtos: PagesDto): AboutModel  {
+    const tabs: AboutTabModel[] = dtos.acf.about_page.tabs.map(
+  (tabDto, index) =>
+    new AboutTabModel(
+      index,
+      tabDto.label,
+      tabDto.text
+    )
+);
+    return new AboutModel(
+      dtos.acf.about_page.content,
+       dtos.acf.about_page.left_text,
+       dtos.acf.about_page.right_text,
+       tabs
+    );
+  }
 
 
 fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {

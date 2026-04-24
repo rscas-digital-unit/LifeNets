@@ -32,12 +32,18 @@
 
         <div class="Hero__texts w-100  Hero__texts__bottomPadding">
 
-            <h1 class="Hero__title" [textContent]="'About'"> </h1>
-            <p class="mb-0 w-75" [textContent]="''">
-
-            </p>
+            <h1 class="Hero__title" [innerHTML]="'About'"> </h1>
+         
 
         </div>
 
     </div>
 </div>
+
+<div>
+   <p class="mb-0 w-75" [innerHTML]="repository.getAbout().content">
+
+            </p>
+</div>
+
+<app-two-columns [items]="repository.getAbout().tabs"></app-two-columns>

@@ -13,6 +13,7 @@ import { MapperService } from './mappers/mapper-service';
 import { DecoderService } from './mappers/decoder-service';
 import { HeroModel } from '../models/hero.model';
 import { PagesDto } from '../models/api/pages-dto.model';
+import { AboutModel } from '../models/about.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +23,13 @@ export class ItemsRepositoryService {
   private publications: Publication[] = [];
   private posts: Post[] = [];
   private advertisings: Advertising[] = [];
+  private about: AboutModel = new AboutModel("","","",[]);
   private hero: HeroModel= new HeroModel(
     'LIFE NETS',
     '',
     '',
     '',
-    'assets/img/herodefault.jpg' //'https://fsr.eui.eu/wp-content/uploads/2026/04/lifeNetsBackground-scaled.jpg'
+    'assets/img/herodefault.jpg' 
   ) 
 
   constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) {
@@ -51,6 +53,7 @@ loadPages(){
 
   tap(({ dto,  media }) => {
     this.hero = this.mapperService.fromPagesDtoToHero(dto,  media);
+    this.about = this.mapperService.fromPagesDtoToAbout(dto);
   })
 
 ).subscribe({
@@ -281,10 +284,13 @@ loadPosts(): void {
   }
 
    
-getHero(): HeroModel  {
-  return this.hero;
-}
+  getHero(): HeroModel  {
+    return this.hero;
+  }
 
+  getAbout(): AboutModel  {
+    return this.about;
+  }
 
   getPosts(): Post[] {
     return this.posts;

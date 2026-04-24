@@ -1,3 +1,10 @@
+
+export interface AboutTabDto  {
+  label: string;
+  text: string; // HTML string
+}
+
+
 export interface PagesDto {
   id: number;
   date: string;
@@ -43,7 +50,7 @@ export interface PagesDto {
     left_text: string;
     right_text: string;
     content: string;
-    tabs: unknown[];
+    tabs: AboutTabDto[];
   };
 }
 
