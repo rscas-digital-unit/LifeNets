@@ -1,1 +1,43 @@
-<p>page-about.component works!</p>
+<header class="header header__desktop py-2">
+  <div class="header__largewrapper position-relative">
+      <div class="header__main  d-flex align-items-center justify-content-between position-relative w-100">
+          <a href="/" class="logo" title="Homepage">
+              <img class="logo-icon" src="https://fsr.eui.eu/wp-content/themes/fsr/assets/img/logos/FSR.png"
+                  alt="Logo FSR">
+          </a>
+          <nav class="position-relative" style="position: relative;">
+              <ul class="main-nav list-inline m-0 h-auto">
+                <li class="list-inline-item h-auto">
+  <a routerLink="/" class="my-nav-link" style="cursor: pointer">Home</a>
+</li>
+                    <li class="list-inline-item h-auto"><a [routerLink]="['/']" fragment="Events">Events</a></li>
+                    <li class="list-inline-item h-auto"><a [routerLink]="['/']" fragment="Posts">Posts</a></li>
+                    <li class="list-inline-item h-auto"><a [routerLink]="['/']" fragment="Publications">Publications</a></li>
+                    
+              </ul>
+              <span class="menu-hover-line hidden" style=""></span>
+              <span class="menu-hover-line hidden" style="transform: translateX(556px); width: 86px;"></span>
+          </nav>
+      </div>
+  </div>
+</header>
+
+<div class="Hero mb-5">
+    <div class="Hero__content h-100" style="">
+
+        <div class="Hero__image"
+         [style.backgroundImage]="'url('+repository.getHero().image+')'"
+            >
+        </div>
+
+        <div class="Hero__texts w-100  Hero__texts__bottomPadding">
+
+            <h1 class="Hero__title" [textContent]="'About'"> </h1>
+            <p class="mb-0 w-75" [textContent]="''">
+
+            </p>
+
+        </div>
+
+    </div>
+</div>

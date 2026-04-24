@@ -1,1 +1,9 @@
 
+.my-nav-link {
+    text-decoration: none;
+    display: block;
+    padding: 0px 16px 0px;
+    color: #fff;
+    transition: color 200ms 0s ease-in-out;
+    align-self: center;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SlideShowComponent } from '../../widgets/slide-show/slide-show.component';
@@ -10,6 +10,7 @@ import { FooterComponent } from '../../widgets/footer/footer.component';
 import { CallToActionComponent } from '../../widgets/call-to-action/call-to-action.component';
 import { ItemsRepositoryService } from '../../../services/items-repository.service';
 import { CardModel } from '../../../models/card.model';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -28,4 +29,5 @@ export class PageViewComponent implements OnInit {
     this.repository.load();
 
   }
+
 }

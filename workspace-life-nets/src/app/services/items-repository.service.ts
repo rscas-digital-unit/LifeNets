@@ -18,7 +18,6 @@ import { PagesDto } from '../models/api/pages-dto.model';
   providedIn: 'root'
 })
 export class ItemsRepositoryService {
-
   private events: Event[] = [];
   private publications: Publication[] = [];
   private posts: Post[] = [];
@@ -31,7 +30,8 @@ export class ItemsRepositoryService {
     'assets/img/herodefault.jpg' //'https://fsr.eui.eu/wp-content/uploads/2026/04/lifeNetsBackground-scaled.jpg'
   ) 
 
-  constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) { }
+  constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) {
+   }
 
   
 
@@ -249,6 +249,9 @@ loadPosts(): void {
 }
 
   load(): void {
+    if(this.events.length>0 && this.posts.length>0 && this.publications.length>0){
+      return;
+    }
     this.api.loginWithTechnicalUser()
       .subscribe({
         next: response => {
