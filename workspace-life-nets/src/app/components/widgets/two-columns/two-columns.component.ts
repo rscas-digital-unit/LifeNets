@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-two-columns',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './two-columns.component.html',
   styleUrl: './two-columns.component.css',

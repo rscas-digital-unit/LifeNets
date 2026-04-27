@@ -1,6 +1,5 @@
-<div class="container-fluid">
-  <div class="Tabs my-9">
-    <div class="row align-items-stretch">
+<div class="Tabs my-9">
+    <div class="row align-items-stretch g-0 px-3">
 
       <!-- COLONNA SINISTRA: NAV -->
       <div
@@ -28,10 +27,10 @@
       </div>
 
       <!-- COLONNA DESTRA: CONTENUTO -->
-      <div class="col-lg-10 tab-content" id="v-pills-tabContent">
+      <div class="col-lg-10 tab-content" id="v-pills-tabContent ps-3">
         <div
           *ngFor="let item of items; let primo = first; trackBy: trackById"
-          class="tab-pane fade"
+          class="tab-pane fade ps-3"
           role="tabpanel"
           [id]="item.id"
           [class.show]="primo"
@@ -43,5 +42,4 @@
       </div>
 
     </div>
-  </div>
 </div>

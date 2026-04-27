@@ -13,7 +13,7 @@
                     <li class="list-inline-item h-auto"><a [routerLink]="['/']" fragment="Events">Events</a></li>
                     <li class="list-inline-item h-auto"><a [routerLink]="['/']" fragment="Posts">Posts</a></li>
                     <li class="list-inline-item h-auto"><a [routerLink]="['/']" fragment="Publications">Publications</a></li>
-                    
+
               </ul>
               <span class="menu-hover-line hidden" style=""></span>
               <span class="menu-hover-line hidden" style="transform: translateX(556px); width: 86px;"></span>
@@ -33,17 +33,17 @@
         <div class="Hero__texts w-100  Hero__texts__bottomPadding">
 
             <h1 class="Hero__title" [innerHTML]="'About'"> </h1>
-         
+
 
         </div>
 
     </div>
 </div>
 
-<div>
-   <p class="mb-0 w-75" [innerHTML]="repository.getAbout().content">
-
-            </p>
+<div class="container-fluid">
+   <p class="mb-0 w-75" [innerHTML]="repository.getAbout().content"> </p>
 </div>
 
 <app-two-columns [items]="repository.getAbout().tabs"></app-two-columns>
+
+<app-footer></app-footer>

@@ -3,12 +3,14 @@ import { ItemsRepositoryService } from '../../../services/items-repository.servi
 import { RouterLink } from '@angular/router';
 import { TwoColumnsComponent } from '../../widgets/two-columns/two-columns.component';
 import { InfoItem } from '../../../models/info-item.model';
+import { FooterComponent } from '../../widgets/footer/footer.component';
 
 
 
 @Component({
   selector: 'app-page-about',
-  imports: [RouterLink,TwoColumnsComponent],
+  standalone: true,
+  imports: [RouterLink, TwoColumnsComponent, FooterComponent],
   templateUrl: './page-about.component.html',
   styleUrl: './page-about.component.css',
 })
