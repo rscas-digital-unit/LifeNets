@@ -7,3 +7,9 @@
     transition: color 200ms 0s ease-in-out;
     align-self: center;
 }
+
+@media (max-width: 1099px) {
+  .my-nav-link:first-of-type {
+    padding-left: 0;
+  }
+}

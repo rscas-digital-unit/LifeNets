@@ -1,45 +1,47 @@
-<div class="Tabs my-9">
-    <div class="row align-items-stretch g-0 px-3">
+<div class="container-fluid">
+  <div class="Tabs my-9">
+      <div class="row align-items-stretch g-0 px-3">
 
-      <!-- COLONNA SINISTRA: NAV -->
-      <div
-        class="col-lg-2 nav flex-column nav-pills"
-        id="v-pills-tab"
-        role="tablist"
-        aria-orientation="vertical"
-      >
-        <h2 class="Tabs__title mb-4">About us</h2>
-
-        <a
-          *ngFor="let item of items; let primo = first; trackBy: trackById"
-          class="Tabs__link mb-2"
-          role="tab"
-          data-bs-toggle="pill"
-          [class.active]="primo"
-          [id]="item.id + '-tab'"
-          [attr.aria-controls]="item.id"
-          [attr.aria-selected]="primo"
-          [attr.data-bs-target]="'#' + item.id"
-          style="cursor: pointer;"
-        >
-          {{ item.label }}
-        </a>
-      </div>
-
-      <!-- COLONNA DESTRA: CONTENUTO -->
-      <div class="col-lg-10 tab-content" id="v-pills-tabContent ps-3">
+        <!-- COLONNA SINISTRA: NAV -->
         <div
-          *ngFor="let item of items; let primo = first; trackBy: trackById"
-          class="tab-pane fade ps-3"
-          role="tabpanel"
-          [id]="item.id"
-          [class.show]="primo"
-          [class.active]="primo"
+          class="col-lg-3 nav flex-column nav-pills pe-3"
+          id="v-pills-tab"
+          role="tablist"
+          aria-orientation="vertical"
         >
-          <h3>{{ item.label }}</h3>
-          <div [innerHTML]="item.content"></div>
-        </div>
-      </div>
+          <h2 class="Tabs__title mb-4">About us</h2>
 
-    </div>
+          <a
+            *ngFor="let item of items; let primo = first; trackBy: trackById"
+            class="Tabs__link mb-2"
+            role="tab"
+            data-bs-toggle="pill"
+            [class.active]="primo"
+            [id]="item.id + '-tab'"
+            [attr.aria-controls]="item.id"
+            [attr.aria-selected]="primo"
+            [attr.data-bs-target]="'#' + item.id"
+            style="cursor: pointer;"
+          >
+            {{ item.label }}
+          </a>
+        </div>
+
+        <!-- COLONNA DESTRA: CONTENUTO -->
+        <div class="col-lg-9 tab-content" id="v-pills-tabContent ps-3">
+          <div
+            *ngFor="let item of items; let primo = first; trackBy: trackById"
+            class="tab-pane fade ps-3"
+            role="tabpanel"
+            [id]="item.id"
+            [class.show]="primo"
+            [class.active]="primo"
+          >
+            <h3>{{ item.label }}</h3>
+            <div [innerHTML]="item.content"></div>
+          </div>
+        </div>
+
+      </div>
+  </div>
 </div>

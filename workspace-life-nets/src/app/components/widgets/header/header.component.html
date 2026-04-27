@@ -1,22 +1,28 @@
 <header class="header header__desktop py-2">
     <div class="header__largewrapper position-relative">
-        <div class="header__main  d-flex align-items-center justify-content-between position-relative w-100">
+        <div class="header__main  d-flex align-items-start align-items-lg-center justify-content-lg-between position-relative w-100">
             <a href="/" class="logo" title="Homepage">
-                <img class="logo-icon" src="https://fsr.eui.eu/wp-content/themes/fsr/assets/img/logos/FSR.png"
+                <img class="logo-icon" src="/assets/img/FSR.png"
                     alt="Logo FSR">
             </a>
             <nav class="position-relative" style="position: relative;">
-                <ul class="main-nav list-inline m-0 h-auto">
+                <ul class="main-nav list-inline mt-3 mt-lg-0 m-lg-0 h-auto">
 
-                    <li class="list-inline-item h-auto">
-                        <a routerLink="/about" class="my-nav-link" style="cursor: pointer">About</a>
-                    </li>
-                    <li class="list-inline-item h-auto"><a href="#Events"
-                            (click)="scrollTo($event, 'Events')">Events</a></li>
-                    <li class="list-inline-item h-auto"><a href="#Posts" (click)="scrollTo($event, 'Posts')">Posts</a>
-                    </li>
-                    <li class="list-inline-item h-auto"><a href="#Publications"
-                            (click)="scrollTo($event, 'Publications')">Publications</a></li>
+                  <li class="list-inline-item h-auto">
+                    <a routerLink="/about" class="my-nav-link" style="cursor: pointer">About</a>
+                  </li>
+
+                  <li class="list-inline-item h-auto">
+                    <a href="/#Events" (click)="goToSection($event, 'Events')">Events</a>
+                  </li>
+
+                  <li class="list-inline-item h-auto">
+                    <a href="/#Posts" (click)="goToSection($event, 'Posts')">Posts</a>
+                  </li>
+
+                  <li class="list-inline-item h-auto">
+                    <a href="/#Publications" (click)="goToSection($event, 'Publications')">Publications</a>
+                  </li>
                 </ul>
                 <span class="menu-hover-line hidden" style=""></span>
                 <span class="menu-hover-line hidden" style="transform: translateX(556px); width: 86px;"></span>

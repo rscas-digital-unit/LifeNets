@@ -32,7 +32,10 @@
               "src/styles.css",
               "src/assets/dist/css/style.css"
             ],
-            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/assets/dist/js/rscas-cookie-manager.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -92,7 +95,10 @@
               "src/styles.css",
               "src/assets/dist/css/style.css"
             ],
-            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/assets/dist/js/rscas-cookie-manager.js"
+            ]
           }
         }
       }

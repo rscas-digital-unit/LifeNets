@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { InfoItem } from '../../../models/info-item.model';
 import { AboutTabModel } from '../../../models/about.model';
 import { CommonModule } from '@angular/common';
 
