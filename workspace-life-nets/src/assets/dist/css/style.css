@@ -13837,8 +13837,19 @@ body.page-template-template-contact .header .svgOpen > .handle {
   display: block;
 }
 @media (max-width: 1099px) {
-  .header__desktop {
-    display: none;
+  .going-down .header__desktop nav,
+  .going-down .header__desktop nav ul{
+      background: white;
+  }
+  .header__desktop nav ul {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    position: fixed;
+    margin-left: -16px;
+    padding-left: 16px;
   }
 }
 .header__mobile {
@@ -13960,6 +13971,12 @@ body.page-template-template-contact .header .svgOpen > .handle {
   padding-left: 40px;
   padding-right: 40px;
 }
+@media (max-width: 1099px) {
+  .header__largewrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
 .header .search__button {
   color: white;
   transition: color 200ms 0s ease-in-out;
@@ -14058,7 +14075,12 @@ body.page-template-template-contact .header .svgOpen > .handle {
   height: 60px;
   padding: 12px 0px;
 }
-.header__main .logo img {
+@media (max-width: 1099px) {
+  .header__main {
+    flex-direction: column;
+  }
+}
+  .header__main .logo img {
   width: 138px;
   height: auto;
 }
