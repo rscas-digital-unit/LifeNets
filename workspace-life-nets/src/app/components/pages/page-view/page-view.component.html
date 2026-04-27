@@ -1,7 +1,3 @@
-<!--app-header></app-header-->
-
-<app-header  [hero]="repository.getHero()"></app-header>
-
 <div id="Events">
 <app-slide-show  [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=event'"></app-slide-show>
 </div>
@@ -10,4 +6,4 @@
 <app-slide-show id="Publications" [sliderName] = "'Publications'" [items]="this.repository.getPublications()" [buttonText]="'All publications'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=publication'"></app-slide-show>
 <ng-container *ngIf="repository.getAdvertisings() as ads"> <app-call-to-action *ngIf="ads.length >= 2" [advertising]="ads[1]"></app-call-to-action></ng-container>
 
-<app-footer></app-footer>
+

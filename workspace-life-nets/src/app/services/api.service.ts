@@ -170,7 +170,7 @@ getPages():Observable<PagesDto> {
   )
 .pipe(
     tap(response => {
-      console.log('GET by pages response:', response);
+      //console.log('GET by pages response:', response);
     })
   );
 

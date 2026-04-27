@@ -26,7 +26,7 @@ await bootstrapApplication(AppComponent, {
         { provide: APP_EXTERNAL_CONFIG, useValue: config }
       ]
     });
-    console.log(`App avviata con versione: ${config.Version}`);
+    //console.log(`App avviata con versione: ${config.Version}`);
 
   } catch (err) {
     // Fallback in caso il file config.json non venga trovato o sia corrotto

@@ -34,13 +34,13 @@
 <div class="Hero mb-5">
     <div class="Hero__content h-100" style="">
 
-        <div class="Hero__image" [style.backgroundImage]="'url('+hero.image+')'">
+        <div class="Hero__image" [style.backgroundImage]="'url('+this.repository.getHeader().image+')'">
         </div>
 
         <div class="Hero__texts w-100  Hero__texts__bottomPadding">
 
-            <h1 class="Hero__title" [textContent]="hero.title"> </h1>
-            <p class="mb-0 w-75" [textContent]="hero.description">
+            <h1 class="Hero__title" [textContent]="this.repository.getHeader().title"> </h1>
+            <p class="mb-0 w-75" [textContent]="this.repository.getHeader().description">
 
             </p>
 

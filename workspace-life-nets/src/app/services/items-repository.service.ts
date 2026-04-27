@@ -14,6 +14,7 @@ import { DecoderService } from './mappers/decoder-service';
 import { HeroModel } from '../models/hero.model';
 import { PagesDto } from '../models/api/pages-dto.model';
 import { AboutModel } from '../models/about.model';
+import { HeaderModel } from '../models/header.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +33,15 @@ export class ItemsRepositoryService {
     'assets/img/herodefault.jpg' 
   ) 
 
+  
+ private currentPage:string = "Landing";
+
   constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) {
    }
 
-  
+  goToPage(pageName:string){
+    this.currentPage = pageName;
+  }
 
 loadPages(){
   this.api.getPages().pipe(
@@ -283,6 +289,14 @@ loadPosts(): void {
 
   }
 
+   getHeader(): HeaderModel  {
+    if(this.currentPage ==="Landing"){
+        return new HeaderModel(this.hero.title,this.hero.description,  this.hero.image);
+    }else if(this.currentPage ==="About"){
+        return new HeaderModel("About","",  this.hero.image);
+    }
+    return new HeaderModel("LIFE NETS","",  this.hero.image);
+  }
    
   getHero(): HeroModel  {
     return this.hero;
