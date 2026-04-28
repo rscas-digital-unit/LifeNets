@@ -8,5 +8,6 @@
   "eventsLink" : "https://fsr.eui.eu/tag/lifenets/?post_tag=lifenets&content_type=event",
   "publicationsLink" : "https://fsr.eui.eu/tag/lifenets/?post_tag=lifenets&content_type=publication",
   "postsLink" : "https://fsr.eui.eu/tag/lifenets/?post_tag=lifenets&content_type=post",
-  "cacheTTLminutes": 240
+  "cacheTTLminutes": 240,
+  "defaultImage": "assets/img/herodefault.jpg"
  }

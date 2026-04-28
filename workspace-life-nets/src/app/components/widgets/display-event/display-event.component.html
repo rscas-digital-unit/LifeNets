@@ -16,7 +16,8 @@
 
         <img
           class="Img Img__rounded"
-          [src]="event.image"
+          [src]="event.image" 
+          (error)="$any($event.target).onerror = null; $any($event.target).src = config.defaultImage"
           [alt]="event.title">
       </a>
 

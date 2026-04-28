@@ -11,6 +11,7 @@ export interface ExternalConfig {
   publicationsLink: string;
   postsLink: string;
   cacheTTLminutes: number;
+  defaultImage: string;
 }
 
 export const APP_EXTERNAL_CONFIG = new InjectionToken<ExternalConfig>('AppExternalConfig');

@@ -17,7 +17,8 @@
 
       <img
         class="Img Img__top"
-        [src]="post.image"
+        [src]="post.image" 
+        (error)="$any($event.target).onerror = null; $any($event.target).src = config.defaultImage"
         [alt]="post.title"
         loading="lazy"
       >

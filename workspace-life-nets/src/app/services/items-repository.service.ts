@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { ApiService } from './api.service';
 import { Event } from '../models/event.model';
@@ -15,11 +15,13 @@ import { HeroModel } from '../models/hero.model';
 import { PagesDto } from '../models/api/pages-dto.model';
 import { AboutModel } from '../models/about.model';
 import { HeaderModel } from '../models/header.model';
+import { APP_EXTERNAL_CONFIG } from '../app.config.token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemsRepositoryService {
+    config = inject(APP_EXTERNAL_CONFIG);
   private events: Event[] = [];
   private publications: Publication[] = [];
   private posts: Post[] = [];
@@ -30,7 +32,7 @@ export class ItemsRepositoryService {
     '',
     '',
     '',
-    'assets/img/herodefault.jpg' 
+    this.config.defaultImage
   ) 
 
   
