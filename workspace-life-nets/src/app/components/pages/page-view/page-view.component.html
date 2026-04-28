@@ -1,7 +1,7 @@
 <div id="Events">
-  <app-slide-show  [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=event'"></app-slide-show>
+<app-slide-show  *ngIf="this.repository.getEvents() && this.repository.getEvents().length > 0" [sliderName] = "'Events'"  [items]="this.repository.getEvents()" [buttonText]="'All events'" [buttonLink]="config.eventsLink"></app-slide-show>
 </div>
-<app-slide-show id="Posts" [sliderName] = "'Posts'" [items]="this.repository.getPosts()" [buttonText]="'All Blog post'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=post'"></app-slide-show>
+<app-slide-show *ngIf="this.repository.getPosts() && this.repository.getPosts().length > 0" id="Posts" [sliderName] = "'Posts'" [items]="this.repository.getPosts()" [buttonText]="'All Blog post'" [buttonLink]="config.postsLink"></app-slide-show>
 <app-call-to-action *ngIf="repository.getAdvertisings()?.length" [advertising]="repository.getAdvertisings()[0]"></app-call-to-action>
 <app-slide-show id="Publications" [sliderName] = "'Publications'" [items]="this.repository.getPublications()" [buttonText]="'All publications'" [buttonLink]="'https://fsr.eui.eu/tag/life-coase/?post_tag=life-coase&content_type=publication'"></app-slide-show>
 <ng-container *ngIf="repository.getAdvertisings() as ads"> <app-call-to-action *ngIf="ads.length >= 2" [advertising]="ads[1]"></app-call-to-action></ng-container>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SlideShowComponent } from '../../widgets/slide-show/slide-show.component';
@@ -11,6 +11,7 @@ import { CallToActionComponent } from '../../widgets/call-to-action/call-to-acti
 import { ItemsRepositoryService } from '../../../services/items-repository.service';
 import { CardModel } from '../../../models/card.model';
 import { ActivatedRoute } from '@angular/router';
+import { APP_EXTERNAL_CONFIG } from '../../../app.config.token';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PageViewComponent implements OnInit {
  items: CardModel[] = [];
 
-  
+  config = inject(APP_EXTERNAL_CONFIG);
   scrollThreshold = 100;
 
   constructor(private route: ActivatedRoute, public repository: ItemsRepositoryService) {}
