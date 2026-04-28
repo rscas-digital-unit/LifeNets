@@ -1,6 +1,6 @@
 // ========================= CONFIGURAZIONE ========================= //
 const COOKIE_NAME = "cookie_consent";
-const GOOGLE_ANALYTICS_ID = "G-WKNM1CW6JX";
+const GOOGLE_ANALYTICS_ID = "G-KQGGH21617";
 const COOKIE_POLICY_URL = "https://www.eui.eu/en/public/cookie-policy";
 const BANNER_TEXT = `We use cookies to help personalise content and provide a better experience. By clicking Accept all, you agree to this, as outlined in our `;
 const IFRAME_BLOCK_TEXT = `This content is blocked. Accept `;
@@ -149,7 +149,7 @@ style.innerHTML = `
 .Cookie__col { flex: 1; padding: 10px; min-width: 300px; }
 .Cookie__col svg { width:30px; height: 30px;}
 .Cookie__buttons { display: flex; justify-content: center; }
-#Cookie__banner--accept,#Cookie__banner--decline,.Cookie__banner--accept,.Cookie__banner--decline{background:#BD8EFF;border:none;padding:12px 15px;margin:5px;cursor:pointer;border-radius:.9375rem;min-width:auto;text-align:center;color:#fff;font-size:1.125rem;font-style:normal;font-weight:800;letter-spacing:-.03375rem}#Cookie__banner--decline,.Cookie__banner--decline{background:#5e5e5e}#Cookie__banner--accept:hover,#Cookie__banner--decline:hover,.Cookie__banner--accept:hover,.Cookie__banner--decline:hover{opacity:.85}
+#Cookie__banner--accept,#Cookie__banner--decline,.Cookie__banner--accept,.Cookie__banner--decline{background:#004676;border:none;padding:12px 15px;margin:5px;cursor:pointer;border-radius:.9375rem;min-width:auto;text-align:center;color:#fff;font-size:1.125rem;font-style:normal;font-weight:800;letter-spacing:-.03375rem}#Cookie__banner--decline,.Cookie__banner--decline{background:#5e5e5e}#Cookie__banner--accept:hover,#Cookie__banner--decline:hover,.Cookie__banner--accept:hover,.Cookie__banner--decline:hover{opacity:.85}
 .Cookie__banner h4 { display: flex; align-items: center; color: #5E5E5E; font-size: 1.75rem; font-weight: 900; }
 .cookieIcon { width: 30px; height: 30px; margin-right: 8px; }
 `;
