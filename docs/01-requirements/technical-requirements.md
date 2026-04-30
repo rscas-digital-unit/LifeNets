@@ -4,10 +4,14 @@
 
 ## 1. Technology Stack
 
-* **Frontend:** Angular
-* **Backend (initial):** WordPress REST API (`fsr.eui.eu`)
-* **Authentication:** JWT (JSON Web Token)
-* **Architecture approach:** API-driven (headless CMS)
+* **Frontend:** Angular 19+
+* **Backend (current):** WordPress REST API (`fsr.eui.eu`)
+* **Frontend Router:** Angular Router for client-side navigation
+* **HTTP Client:** Angular's `HttpClient` with interceptor-based caching
+* **State Management:** Service-based (no external state library)
+* **CSS Framework:** Bootstrap 5.3
+* **UI Components:** Swiper (carousels), Angular standalone components
+* **Architecture approach:** API-driven headless CMS (configuration-based)
 
 ---
 
@@ -19,7 +23,6 @@ The application must be fully **configuration-driven**.
 export const environment = {
   production: false,
   apiBaseUrl: 'https://fsr.eui.eu/wp-json/wp/v2',
-  authUrl: 'https://fsr.eui.eu/wp-json/jwt-auth/v1/token',
   projectTagId: 1409 // TEST: 1409 | PROD: 2317
 };
 ```
@@ -33,70 +36,7 @@ export const environment = {
 
 ---
 
-## 3. Authentication (JWT)
-
-The application uses the official WordPress plugin:
-
-👉 https://it.wordpress.org/plugins/jwt-authentication-for-wp-rest-api/
-
-This reference must be used to understand available endpoints and request examples.
-
----
-
-### 3.1 Login
-
-```http
-POST /wp-json/jwt-auth/v1/token
-```
-
-**Payload**
-
-```json
-{
-  "username": "...",
-  "password": "..."
-}
-```
-
-**Response**
-
-```json
-{
-  "token": "...",
-  "user_email": "...",
-  "user_display_name": "..."
-}
-```
-
----
-
-### 3.2 Token Usage
-
-All authenticated requests must include:
-
-```
-Authorization: Bearer {JWT_TOKEN}
-```
-
----
-
-### 3.3 Token Validation
-
-```http
-POST /wp-json/jwt-auth/v1/token/validate
-```
-
----
-
-### 3.4 Token Management
-
-* Default expiration: **7 days**
-* Store token securely (localStorage or memory)
-* Validate token at application startup
-
----
-
-## 4. API Usage Rule
+## 3. API Usage Rule
 
 All content requests must include:
 
@@ -106,7 +46,7 @@ All content requests must include:
 
 ---
 
-## 5. Publications
+## 4. Publications
 
 ### Endpoint
 
@@ -114,23 +54,124 @@ All content requests must include:
 GET /publication?tags={tagId}
 ```
 
-### Fields Mapping
+### Response
 
-| Field       | Source                                     |
-| ----------- | ------------------------------------------ |
-| link        | `link`                                     |
-| title       | `title.rendered`                           |
-| description | `content.rendered` (truncate to 150 chars) |
-| tags        | `tags[]`                                   |
-| categories  | `categories[]`                             |
-| type        | `acf.pub-type`                             |
-| date        | `acf.date_accessioned`                     |
-| authors     | `acf.authors_relationship[]`               |
-| editors     | `acf.editors_relationship[]`               |
+All content requests return a paginated array of publication objects with the following fields available for mapping:
+
+| Field       | Source                                     | Notes                          |
+| ----------- | ------------------------------------------ | ------------------------------ |
+| link        | `link`                                     | URL to original publication    |
+| title       | `title.rendered`                           | Publication title              |
+| description | `content.rendered`                         | Full content (truncate to 150 chars in UI) |
+| tags        | `tags[]`                                   | Tag IDs (fetch full objects separately) |
+| categories  | `categories[]`                             | Category IDs (fetch separately) |
+| type        | `acf.pub-type`                             | Publication type from ACF      |
+| date        | `acf.date_accessioned`                     | Publication date               |
+| authors     | `acf.authors_relationship[]`               | Author IDs (fetch via people endpoint) |
+| editors     | `acf.editors_relationship[]`               | Editor IDs (fetch via people endpoint) |
+| image       | `featured_media`                           | Media ID (fetch via media endpoint) |
+
+### Related Data Fetching
+
+The following endpoints must be called to resolve relationships:
+
+**Tags**
+
+```
+GET /tags?include=id1,id2,id3
+```
+
+Fetch using comma-separated tag IDs from publication responses.
+
+**Categories**
+
+```
+GET /categories?include=id1,id2,id3
+```
+
+**People**
+
+```
+GET /people?include=id1,id2,id3
+```
+
+Fetch using author and editor relationship IDs. Each person object includes `featured_media` for their profile image.
+
+**Media**
+
+```
+GET /media?include=id1,id2,id3
+```
+
+Fetch using featured_media IDs from publications and people. 
+
+**Image Priority Logic:**
+1. Check `media_details.sizes.thumbnail.source_url`
+2. Fallback to `source_url`
 
 ---
 
-### Additional Data Fetching
+## 5. Events
+
+### Endpoint
+
+```
+GET /event?tags={tagId}
+```
+
+### Response
+
+| Field       | Source                        | Notes |
+| ----------- | ----------------------------- | ----- |
+| link        | `link`                        | URL to original event |
+| title       | `title.rendered`              | Event title |
+| description | `content.rendered`            | Full content (truncate to 150 chars in UI) |
+| type        | `event_type[]`                | Event type IDs (fetch full objects separately) |
+| date        | `acf.MainStart`               | Event start date |
+| location    | `acf.location`                | Event location text |
+| image       | `featured_media`              | Media ID (fetch via media endpoint) |
+
+### Related Data Fetching
+
+**Event Types**
+
+```
+GET /event_type?include=id1,id2,id3
+```
+
+Fetch using comma-separated event_type IDs from event responses.
+
+**Media**
+
+```
+GET /media?include=id1,id2,id3
+```
+
+Fetch using featured_media IDs from events.
+
+---
+
+## 6. Posts
+
+### Endpoint
+
+```
+GET /posts?tags={tagId}
+```
+
+### Response
+
+| Field       | Source                                               | Notes |
+| ----------- | ---------------------------------------------------- | ----- |
+| link        | `link`                                               | URL to original post |
+| title       | `title.rendered`                                     | Post title |
+| description | `excerpt.rendered` OR fallback to `content.rendered` | Post excerpt or content (truncate to 150 chars in UI) |
+| tags        | `tags[]`                                             | Tag IDs (fetch full objects separately) |
+| categories  | `categories[]`                                       | Category IDs (fetch separately) |
+| type        | `typepost[]`                                         | Post type IDs (fetch full objects separately) |
+| image       | `featured_media`                                     | Media ID (fetch via media endpoint) |
+
+### Related Data Fetching
 
 **Tags**
 
@@ -144,79 +185,21 @@ GET /tags?include=id1,id2,id3
 GET /categories?include=id1,id2,id3
 ```
 
-**People**
+**Post Types (typepost)**
 
 ```
-GET /people/{id}
+GET /typepost?include=id1,id2,id3
 ```
 
 **Media**
 
 ```
-GET /media/{id}
-```
-
-Image fallback:
-
-```
-thumbnail → source_url
+GET /media?include=id1,id2,id3
 ```
 
 ---
 
-## 6. Events
-
-### Endpoint
-
-```
-GET /event?tags={tagId}
-```
-
-### Fields Mapping
-
-| Field       | Source                        |
-| ----------- | ----------------------------- |
-| link        | `link`                        |
-| title       | `title.rendered`              |
-| description | `content.rendered` (truncate) |
-| type        | `event_type[]`                |
-| date        | `acf.MainStart`               |
-| location    | `acf.location`                |
-| image       | `featured_media`              |
-
----
-
-### Event Type
-
-```
-GET /event_type/{id}
-```
-
----
-
-## 7. Posts
-
-### Endpoint
-
-```
-GET /posts?tags={tagId}
-```
-
-### Fields Mapping
-
-| Field       | Source                                               |
-| ----------- | ---------------------------------------------------- |
-| link        | `link`                                               |
-| title       | `title.rendered`                                     |
-| description | `excerpt.rendered` OR fallback to `content.rendered` |
-| tags        | `tags[]`                                             |
-| categories  | `categories[]`                                       |
-| type        | `typepost[]`                                         |
-| image       | `featured_media`                                     |
-
----
-
-## 8. Advertising (CTA)
+## 7. Advertising (CTA)
 
 ### Endpoint
 
@@ -224,85 +207,97 @@ GET /posts?tags={tagId}
 GET /advertising?tags={tagId}
 ```
 
-### Fields Mapping
+### Response
 
-| Field       | Source            |
-| ----------- | ----------------- |
-| date        | `date`            |
-| image       | `featured_media`  |
-| title       | `acf.title`       |
-| description | `acf.description` |
-| cta_label   | `acf.cta_label`   |
-| cta_link    | `acf.cta_link`    |
+| Field       | Source            | Notes |
+| ----------- | ----------------- | ----- |
+| date        | `date`            | Publication date |
+| image       | `featured_media`  | Media ID (fetch via media endpoint) |
+| title       | `acf.title`       | Advertising title from ACF |
+| description | `acf.description` | Advertising description from ACF |
+| cta_label   | `acf.cta_label`   | Call-to-action button label |
+| cta_link    | `acf.cta_link`    | Call-to-action URL |
+
+### Related Data Fetching
+
+**Media**
+
+```
+GET /media?include=id1,id2,id3
+```
+
+Fetch using featured_media IDs from advertising objects.
 
 ---
 
-## 9. Media Handling
+## 8. Media Handling
 
 ### Endpoint
 
 ```
-GET /media/{id}
+GET /media?include=id1,id2,id3
 ```
 
-### Priority Logic
+### Image Resolution Priority
 
-1. `media_details.sizes.thumbnail`
-2. fallback → `source_url`
+When retrieving images, use the following priority:
+
+1. **Thumbnail**: `media_details.sizes.thumbnail.source_url` (if available)
+2. **Fallback**: `source_url` (full resolution)
 
 ---
 
-## 10. Page Content (Hero & Static Sections)
+## 9. Page Content (Hero & Static Sections)
 
 ### Endpoint
 
 ```
-GET /pages/49631
+GET /pages/49631?tags={tagId}
 ```
-
----
 
 ### Purpose
 
 This endpoint provides the **main static content of the landing page**, including:
 
-- Hero section content
-- About section content
-- Additional structured content (tabs, texts, etc.)
+- Hero section content and background image
+- About section content, tabs, and text blocks
+- Other structured content for the landing page
 
----
+### Response Fields
 
-### Fields Mapping
+| Field | Source | Notes |
+|------|--------|-------|
+| hero_title | `acf.hero.title` | Main hero title |
+| hero_description | `acf.hero.description` | Hero subtitle/description |
+| hero_cta_text | `acf.hero.button_link_text` | Call-to-action button label |
+| hero_cta_link | `acf.hero.button_link` | Call-to-action button URL |
+| hero_background | `featured_media` | Media ID for hero background image |
+| about_left_text | `acf.about_page.left_text` | About section left column text |
+| about_right_text | `acf.about_page.right_text` | About section right column text |
+| about_content | `acf.about_page.content` | About section main content |
+| about_tabs | `acf.about_page.tabs` | Array of tab objects with `label` and `text` fields |
 
-| Field | Source |
-|------|--------|
-| hero_title | `acf.hero.title` |
-| hero_description | `acf.hero.description` |
-| hero_cta_text | `acf.hero.button_link_text` |
-| hero_cta_link | `acf.hero.button_link` |
-| about_left_text | `acf.about_page.left_text` |
-| about_right_text | `acf.about_page.right_text` |
-| about_content | `acf.about_page.content` |
-| about_tabs | `acf.about_page.tabs` |
-| hero_background | `featured_media` |
+### Related Data Fetching
 
----
-
-### Media Handling
-
-To retrieve the hero background image (use the fullsize resolution):
+**Media**
 
 ```
-GET /media/{featured_media}
+GET /media?include={featured_media_id}
 ```
+
+Fetch the hero background image using the `featured_media` ID from the page response. Use full-size resolution for banner images.
 
 ---
 
-## 11. Data Normalization (MANDATORY)
+## 10. Data Normalization (MANDATORY)
 
-WordPress responses must NOT be used directly in UI components.
+WordPress REST API responses must NOT be used directly in UI components.
 
-Define a unified model:
+### Requirement
+
+All API responses must be mapped to **domain-specific models** before being consumed by components. Raw DTO objects stay within the service layer.
+
+### Example Domain Model
 
 ```ts
 interface CardModel {
@@ -318,175 +313,196 @@ interface CardModel {
 }
 ```
 
-All content types must be mapped into this structure.
+### Mapping Responsibility
+
+Each content type (Publications, Events, Posts, Advertising) must be transformed from its DTO form to a normalized model:
+
+- **DTO** (in `models/api/`): Raw WordPress response structure with nested relationships and ACF fields
+- **Domain Model** (in `models/`): Flattened, UI-ready structure with resolved relationships
+
+The `MapperService` handles this transformation using fully resolved data (media, people, taxonomies).
 
 ---
 
-## 12. API Architecture (CRITICAL)
+## 11. Architecture Pattern (CRITICAL)
 
-### Required Services
+### Service Layer Organization
 
-* AuthService
-* PublicationService
-* EventService
-* PostService
-* AdvertisingService
-* MediaService
-* TaxonomyService
+The application implements a three-layer architecture for API data handling:
+
+1. **API Service** (`ApiService`): Raw HTTP calls to WordPress REST API
+2. **Mapper Service** (`MapperService`): Transforms DTOs to domain models
+3. **Repository Service** (`ItemsRepositoryService`): Orchestrates multi-stage data loading and state management
+
+### Key Rules
+
+- ❌ **No direct API calls in components** — All HTTP requests go through services
+- ✔ **Unidirectional data flow** — Components consume data through repository getters
+- ✔ **Lazy relationship resolution** — Related data (media, people, taxonomies) fetched in parallel via `forkJoin`
+
+### Multi-Stage Loading Pattern
+
+For complex entities with relationships (publications, events), use this pattern:
+
+```
+Stage 1: Fetch main DTOs + extract relationship IDs
+          ↓
+Stage 2: Fetch all related data in parallel (media, taxonomies, people)
+          ↓
+Stage 3: Map and store normalized models
+```
+
+This minimizes N+1 queries by batching relationship fetches.
 
 ---
 
-### Rule
+## 12. Backend Abstraction (SCALABILITY)
 
-❌ No API calls inside components
-✔ All API calls must go through services
-
----
-
-## 13. Backend Abstraction (SCALABILITY)
-
-The application must support future backend replacement.
+The application must support **future backend replacement** without rewriting UI logic.
 
 ### Adapter Pattern
 
+Define a content interface independent of WordPress:
+
 ```ts
 interface ContentAdapter {
-  getPublications();
-  getEvents();
-  getPosts();
-  getAdvertising();
+  getPublications(): Observable<Publication[]>;
+  getEvents(): Observable<Event[]>;
+  getPosts(): Observable<Post[]>;
+  getAdvertising(): Observable<Advertising[]>;
+  getPages(): Observable<PageContent>;
 }
 ```
 
-Example:
+**Current Implementation**: `WordpressAdapter` (encapsulated in `ApiService` and `MapperService`)
 
-```ts
-class WordpressAdapter implements ContentAdapter {}
-```
+**Future Support**: Implement new adapters (e.g., `RestfulCmsAdapter`, `GraphQLAdapter`) without changing component code.
 
 ---
 
-## 14. Performance and Caching Guidelines
+## 13. Performance and Caching
 
-### General Rules
+### Strategy
 
-* Batch taxonomy calls:
-
+* **Batch API calls** for related data using comma-separated ID parameters
   ```
   /tags?include=id1,id2,id3
-  /categories?include=id1,id2,id3
+  /media?include=id1,id2,id3
+  /people?include=id1,id2,id3
   ```
-* Avoid duplicate API calls
-* Use lazy loading for sections
-* Implement caching at service or adapter level (NOT in components)
-
----
+* **Parallel fetching** using RxJS `forkJoin` to prevent waterfall requests
+* **Automatic HTTP caching** via interceptor on all GET requests
+* **TTL-based cache invalidation** configurable per environment
 
 ### Recommended Caching Policy
 
-#### Cache Duration
-
-**2–3 hours (low volatility data):**
-
-* tags
-* categories
-* event types
-* post types
-* media
-* people
-
-**15–60 minutes (dynamic content):**
-
-* publications
-* posts
-* events
-* advertising
-
----
-
-### Caching Rules
-
-* Cache must be configurable (TTL-based)
-* Cache should be enabled at least in production
-* Token must NOT be cached as content
-* Cache must be invalidated when:
-
-  * TTL expires
-  * user logs out
-  * authentication fails
-
----
-
-### Recommended Implementation
-
-* Use a caching layer inside services or adapter
-* Use in-memory cache or localStorage (depending on needs)
-* Centralize caching logic (avoid duplication across services)
-
----
-
-## 15. UI Behaviour Requirements
-
-Cards must:
-
-* Display max 150 characters
-* Always include link to original content
-* Use thumbnail images with fallback
-
-Main sections:
-
+#### Short TTL (15–60 minutes for dynamic content)
 * Publications
-* Events
 * Posts
-* CTA
+* Events
+* Advertising
+
+#### Long TTL (2–3 hours for static data)
+* Tags
+* Categories
+* Event types
+* Post types
+* Media
+* People
+* Pages (hero, about content)
+
+### Cache Implementation
+
+- **Mechanism**: HTTP interceptor caches GET responses in `localStorage` with TTL timestamps
+- **Configuration**: Set `cacheTTLminutes` in `config.json` (default: 240 minutes)
+- **Automatic Storage**: All GET responses cached immediately upon successful fetch
+- **Automatic Retrieval**: Cache checked before network request; returned if TTL valid
+- **Expiration**: Stale cache entries removed on next access attempt
+
+### Cache Invalidation
+
+Cache is automatically invalidated when:
+* TTL expires
+* Application reloads (stale entries removed on access)
+* Explicit localStorage clearing (developer action)
 
 ---
 
-## 16. Error Handling
+## 14. UI Behavior Requirements
 
-The application must handle:
+### Content Display
 
-* Missing images → fallback
-* Missing excerpt → fallback to content
-* API errors → graceful UI (no crash)
-* Authentication errors → redirect to login
+* Truncate descriptions to max **150 characters** in list views
+* Always include **link to original content**
+* Use **thumbnail images with fallback** to default image when unavailable
 
----
+### Main Sections
 
-## 17. Future-Proof Requirements
+The landing page includes the following primary sections:
 
-The system must support:
-
-* Multiple projects (config-based)
-* Multiple APIs (not only WordPress)
-* Filters and search
-* Rich components (dashboards, charts)
-
----
-
-## 18. Development Principles
-
-The implementation must ensure:
-
-* Clean architecture
-* Reusable components
-* Clear separation between:
-
-  * UI
-  * API layer
-  * business logic
-* Minimal coupling with WordPress schema
+1. **Hero Section** — Title, description, CTA (from page endpoint)
+2. **Publications** — Publication cards with metadata
+3. **Events** — Event cards with date and location
+4. **Posts** — Blog post cards
+5. **Call-to-Action (Advertising)** — Featured promotional content
+6. **About Section** — Static content with tabbed interface (from page endpoint)
 
 ---
 
-## 19. Key Architectural Constraint
+## 15. Error Handling
 
-The frontend must be designed as a **content aggregation layer**, not as a WordPress-dependent frontend.
+The application must gracefully handle:
 
-This means:
+* **Missing images** → Use fallback/default image
+* **Missing excerpt or description** → Fallback to content body or placeholder
+* **API errors** → Log error, display graceful message, prevent crash
+* **Malformed responses** → Use safe property access, provide defaults
+* **Network timeouts** → Show cached data if available, user-friendly error message
 
-* WordPress is only a data source
-* Business logic must remain independent
-* UI must rely on normalized models, not raw API responses
+---
 
-```
+## 16. Future-Proof Requirements
+
+The system must be designed to support:
+
+* **Multiple projects** — Configuration-based project switching without code changes
+* **Multiple backends** — Adapter pattern allows different CMS/API sources
+* **Content filtering and search** — Repository layer can support query parameters
+* **Rich UI components** — Dashboards, charts, advanced analytics
+* **Pagination** — WordPress API supports `page` and `per_page` parameters
+* **Sorting and ordering** — API supports `orderby` and `order` parameters
+
+---
+
+## 17. Development Principles
+
+Implementation must ensure:
+
+* **Clean Architecture** — Clear separation of concerns across layers
+* **Reusable Components** — UI components accept data via `@Input()`, emit events via `@Output()`
+* **Explicit Separation**: 
+  * **UI Layer** — Standalone Angular components in `src/app/components/`
+  * **API Layer** — `ApiService` handles HTTP and DTO responses
+  * **Business Logic Layer** — `ItemsRepositoryService` orchestrates data loading and caching
+  * **Mapping Layer** — `MapperService` transforms DTOs to domain models
+* **Minimal WordPress Coupling** — Business logic independent of REST API structure; adapter pattern enables backend switching
+
+---
+
+## 18. Key Architectural Constraint
+
+The frontend is designed as a **content aggregation and presentation layer**, not as a WordPress-dependent frontend.
+
+### Implications
+
+* **WordPress is only a data source** — Not the application framework
+* **Business logic remains independent** — Portable to other backends
+* **UI relies on normalized models** — Never directly uses raw API responses
+* **Service layer is extensible** — Adapter pattern enables multi-backend support
+
+### Validation
+
+- ✔ Components **never import or use DTOs directly**
+- ✔ All data transformations happen in `MapperService`
+- ✔ Repository layer exposes only domain models via getter methods
+- ✔ If backend changes, only `ApiService` and `MapperService` need modification
