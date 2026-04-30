@@ -53,19 +53,20 @@ fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
     );
   }
 
- fromAdvertisingDto(dto: AdvertisingDto, images: TaxonomyDto[]): Event {
+ fromAdvertisingDto(dto: AdvertisingDto, images: TaxonomyDto[]): Advertising {
 
     return new Advertising(
       dto.id,
       this.decoderService.decodeHtmlEntities(dto.acf.title) ?? '',
       this.decoderService.extractPlainTextPreview(dto.acf.description) ??  '',
+      this.decoderService.decodeHtmlEntities(dto.acf.cta_label) ?? '',
       dto.link,
       this.decoderService.decodeIdToLink(dto.featured_media,images)
     );
 
   }
 
- fromAdvertisingDtoList(dtos: AdvertisingDto[], images: TaxonomyDto[]): Event[] {
+ fromAdvertisingDtoList(dtos: AdvertisingDto[], images: TaxonomyDto[]): Advertising[] {
     return dtos.map(dto => this.fromAdvertisingDto(dto,images));
   }
 
