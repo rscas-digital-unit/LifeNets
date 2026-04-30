@@ -20,8 +20,8 @@ import { AboutModel, AboutTabModel } from '../../models/about.model';
   providedIn: 'root'
 })
 export class MapperService {
-  
- 
+
+
 
   constructor(private decoderService: DecoderService) { }
 
@@ -54,15 +54,15 @@ fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
   }
 
  fromAdvertisingDto(dto: AdvertisingDto, images: TaxonomyDto[]): Event {
-    
+
     return new Advertising(
       dto.id,
-      this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? '',
+      this.decoderService.decodeHtmlEntities(dto.acf.title) ?? '',
       this.decoderService.extractPlainTextPreview(dto.acf.description) ??  '',
       dto.link,
       this.decoderService.decodeIdToLink(dto.featured_media,images)
     );
-    
+
   }
 
  fromAdvertisingDtoList(dtos: AdvertisingDto[], images: TaxonomyDto[]): Event[] {
@@ -70,7 +70,7 @@ fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
   }
 
   fromEventDto(dto: EventDto,eventTypes: TaxonomyDto[],images: TaxonomyDto[]): Event {
-    
+
     return new Event(
       dto.id,
       this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? this.decoderService.decodeHtmlEntities(dto.acf?.title) ?? '',
@@ -126,7 +126,7 @@ fromPublicationDto(
 
 
   fromPostDto(dto: PostDto,images: TaxonomyDto[], categories: TaxonomyDto[], typespost: TaxonomyDto[]): Post {
-    
+
     return new Post(
       dto.id,
       this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? '',
@@ -141,7 +141,7 @@ fromPublicationDto(
   fromPostDtoList(dtos: PostDto[],images: TaxonomyDto[], categories: TaxonomyDto[], typespost: TaxonomyDto[]): Post[] {
     return dtos.map(dto => this.fromPostDto(dto, images, categories,typespost));
   }
-  
+
 
 
   buildPeopleModels(
