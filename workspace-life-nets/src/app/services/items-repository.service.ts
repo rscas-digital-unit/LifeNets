@@ -263,32 +263,12 @@ loadPosts(): void {
     if(this.events.length>0 && this.posts.length>0 && this.publications.length>0){
       return;
     }
-    this.api.loginWithTechnicalUser()
-      .subscribe({
-        next: response => {
-          //console.log('Login tecnico effettuato');
-          this.api.validateToken()
-            .subscribe({
-              next: response => {
-                //console.log('Validate toker effettuato');
-              },
-              error: error => {
-                console.error('Errore Validate toker', error);
-              }
-            });
-            this.loadPages();
-            this.loadEvents();
-            this.loadPublications();
-            this.loadPosts();
-            this.loadAdvertisings();
-
-        },
-        error: error => {
-          console.error('Errore login tecnico', error);
-        }
-      });
-
-
+      this.loadPages();
+      this.loadEvents();
+      this.loadPublications();
+      this.loadPosts();
+      this.loadAdvertisings();
+ 
   }
 
    getHeader(): HeaderModel  {
