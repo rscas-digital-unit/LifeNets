@@ -4,7 +4,6 @@ import { ApiService } from './api.service';
 import { Event } from '../models/event.model';
 import { Publication } from '../models/publication.model';
 import { Post } from '../models/post.model';
-import { CardModel } from '../models/card.model';
 
 import { forkJoin, of, switchMap, tap } from 'rxjs';
 
@@ -22,6 +21,7 @@ import { APP_EXTERNAL_CONFIG } from '../app.config.token';
 })
 export class ItemsRepositoryService {
     config = inject(APP_EXTERNAL_CONFIG);
+  // This service keeps the already-mapped domain models in memory so components can read them synchronously.
   private events: Event[] = [];
   private publications: Publication[] = [];
   private posts: Post[] = [];
@@ -33,9 +33,10 @@ export class ItemsRepositoryService {
     '',
     '',
     this.config.defaultImage
-  ) 
+  )
 
-  
+
+ // Page name is tracked here only to derive the header content; it is not the source of routing truth.
  private currentPage:string = "Landing";
 
   constructor(private api: ApiService, private mapperService: MapperService, private decoderService: DecoderService) {
@@ -49,6 +50,7 @@ loadPages(){
   this.api.getPages().pipe(
   switchMap(dto => {
 
+    // WordPress returns the hero background as a media id, so the image must be resolved separately.
     const featuredMediaString = this.decoderService.extractUniqueAsString(
       [dto],
       (page: PagesDto) => page.featured_media
@@ -76,6 +78,7 @@ loadEvents(){
   this.api.getEvents().pipe(
 
   switchMap(dtos => {
+    // Resolve all related ids up front so event types and featured images are fetched once per batch.
     const typesString = this.decoderService.extractUniqueAsString(
       dtos,
       dto => dto.event_type
@@ -112,6 +115,7 @@ loadAdvertisings(){
   switchMap(dtos => {
 
 
+    // Advertising cards only need their featured image in addition to the raw DTO fields.
     const featuredMediaString = this.decoderService.extractUniqueAsString(
       dtos,
       dto => dto.featured_media
@@ -139,7 +143,7 @@ loadAdvertisings(){
 loadPublications(): void {
   this.api.getPubblications().pipe(
 
-    // 🔹 Primo stadio: carico publications + decodifiche dirette
+    // First load publications and every directly referenced resource they need for mapping.
     switchMap(dtos => {
 
       const featuredMediaString = this.decoderService.extractUniqueAsString(
@@ -176,16 +180,18 @@ loadPublications(): void {
 
     switchMap(({ dtos, media, tags, categories, people }) => {
 
+      // People images can only be resolved after the related people records have been loaded.
       const peopleMediaString = this.decoderService.extractPeopleFeaturedMediaAsString(
         people
       );
 
+      // Wrap already-resolved values with `of(...)` so the second forkJoin keeps a single payload shape.
       return forkJoin({
         dtos: of(dtos),
-        media: of(media),          
-        tags: of(tags),            
+        media: of(media),
+        tags: of(tags),
         categories: of(categories),
-        people: of(people),        
+        people: of(people),
         peopleMedia: this.api.getList('media', peopleMediaString)
       });
 
@@ -213,7 +219,7 @@ loadPublications(): void {
 loadPosts(): void {
   this.api.getPosts().pipe(
 
-    // 🔹 Primo livello: DTO + media post + people (autori)
+    // Posts need taxonomy names and featured images, so related ids are batched before mapping.
     switchMap(dtos => {
       //console.log("POST DTO");
       //console.log(dtos);
@@ -243,7 +249,7 @@ loadPosts(): void {
     }),
 
   tap(({ dtos, media,categories,typepost }) => {
-   
+
       this.posts = this.mapperService.fromPostDtoList(
         dtos,
         media,
@@ -260,6 +266,7 @@ loadPosts(): void {
 }
 
   load(): void {
+    // Use the main collections as a coarse hydration signal before triggering the full repository reload.
     if(this.events.length>0 && this.posts.length>0 && this.publications.length>0){
       return;
     }
@@ -268,10 +275,11 @@ loadPosts(): void {
       this.loadPublications();
       this.loadPosts();
       this.loadAdvertisings();
- 
+
   }
 
    getHeader(): HeaderModel  {
+    // Header copy is derived from the repository page state while reusing the current hero image.
     if(this.currentPage ==="Landing"){
         return new HeaderModel(this.hero.title,this.hero.description,  this.hero.image);
     }else if(this.currentPage ==="About"){
@@ -279,7 +287,7 @@ loadPosts(): void {
     }
     return new HeaderModel("LIFE NETS","",  this.hero.image);
   }
-   
+
   getHero(): HeroModel  {
     return this.hero;
   }

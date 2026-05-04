@@ -26,6 +26,7 @@ export class MapperService {
   constructor(private decoderService: DecoderService) { }
 
 fromPagesDtoToAbout(dtos: PagesDto): AboutModel  {
+    // Tabs do not expose a stable backend id, so the array index is used as the local UI identifier.
     const tabs: AboutTabModel[] = dtos.acf.about_page.tabs.map(
   (tabDto, index) =>
     new AboutTabModel(
@@ -44,6 +45,7 @@ fromPagesDtoToAbout(dtos: PagesDto): AboutModel  {
 
 
 fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
+     // The hero background is stored as a featured media id and must be resolved against the fetched media list.
      return new HeroModel(
       dtos.acf.hero.title,
        dtos.acf.hero.description,
@@ -74,6 +76,7 @@ fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
 
     return new Event(
       dto.id,
+      // Some event entries expose the label in `title.rendered`, while others only populate the ACF title field.
       this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? this.decoderService.decodeHtmlEntities(dto.acf?.title) ?? '',
       this.decoderService.extractPlainTextPreview(dto.excerpt?.rendered) ?? this.decoderService.extractPlainTextPreview(dto.content?.rendered ?? ''),
       dto.link,
@@ -96,6 +99,7 @@ fromPublicationDto(
   peopleMedia: TaxonomyDto[]
 ): Publication {
 
+  // Publications can reference both authors and editors, but the UI consumes a single related-people collection.
   const relatedPeopleIds = [
     ...(dto.acf.authors_relationship ?? []),
     ...(dto.acf.editors_relationship ?? [])
@@ -110,6 +114,7 @@ fromPublicationDto(
   return new Publication(
     dto.id,
     this.decoderService.decodeHtmlEntities(dto.title?.rendered) ?? '',
+    // Prefer the explicit excerpt when available and fall back to a preview generated from the full content.
     this.decoderService.extractPlainTextPreview(dto.excerpt?.rendered)
       ?? this.decoderService.extractPlainTextPreview(dto.content?.rendered ?? ''),
     dto.link,
@@ -153,7 +158,8 @@ fromPublicationDto(
 
   const idsSet = new Set<number>(relatedPeopleIds);
 
-  const peopleModels: People[] = people
+  return people
+    // Only keep people explicitly referenced by the publication before resolving their display data.
     .filter(person => idsSet.has(person.id))
     .map(person => {
 
@@ -164,20 +170,18 @@ fromPublicationDto(
         .filter(Boolean)
         .join(' ');
 
+      // People images are resolved from the separately loaded media collection, just like post featured images.
       const imageLink = this.decoderService.decodeIdToLink(
         person.featured_media,
         peopleMedia
       );
 
-      const model = new People(
+      return new People(
         person.id,
         fullName,
         imageLink
       );
-      return model;
     });
-
-  return peopleModels;
 }
 
 

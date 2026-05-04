@@ -7,8 +7,8 @@ import { TaxonomyDto } from '../../models/api/taxonomy-dto.model';
   providedIn: 'root',
 })
 export class DecoderService {
-  
-  
+
+
 decodeIdsToNames(
   ids: Array<number | string>,
   taxonomy: TaxonomyDto[]
