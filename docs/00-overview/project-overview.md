@@ -59,19 +59,6 @@ Until production content is fully available, the application should use the **te
 
 This tag-based approach should be treated as a configurable project parameter, not as hardcoded business logic.
 
-## Authentication Context
-
-Access to the WordPress REST API will require user authentication via **JWT (JSON Web Token)**. Users will log in with dedicated credentials already created for the application. Authentication should therefore be considered part of the standard application flow, not an optional developer-only feature.
-
-The commonly used WordPress plugin **JWT Authentication for WP REST API** exposes filters for token timing and documents a default expiration of `time() + (DAY_IN_SECONDS * 7)`, i.e. 7 days. :contentReference[oaicite:0]{index=0}
-
-The frontend application must therefore be designed to:
-
-- Authenticate users before protected API consumption
-- Store and reuse the token securely during its validity period
-- Detect expired or invalid tokens
-- Gracefully redirect users back to the login flow when needed
-
 ## Main Functional Behaviour
 
 From a user perspective, the application should behave as a curated project landing page rather than as a raw feed of WordPress content.
