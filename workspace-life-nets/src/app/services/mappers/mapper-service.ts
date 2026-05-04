@@ -62,7 +62,7 @@ fromPagesDtoToHero(dtos: PagesDto, media: TaxonomyDto[]): HeroModel  {
       this.decoderService.decodeHtmlEntities(dto.acf.title) ?? '',
       this.decoderService.extractPlainTextPreview(dto.acf.description) ??  '',
       this.decoderService.decodeHtmlEntities(dto.acf.cta_label) ?? '',
-      dto.link,
+      dto.acf.cta_link,
       this.decoderService.decodeIdToLink(dto.featured_media,images)
     );
 
